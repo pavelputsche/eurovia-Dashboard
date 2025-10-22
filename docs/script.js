@@ -7,6 +7,11 @@ const pageTitle = document.querySelector('.page-title');
 const dashboardContent = document.getElementById('dashboardContent');
 const pageContents = document.querySelectorAll('.page-content');
 
+// Debug: Log what pageContents includes
+console.log('pageContents found:', Array.from(pageContents).map(el => el.id));
+console.log('quickActionBtns found:', quickActionBtns.length);
+console.log('navItems found:', navItems.length);
+
 // Mobile menu toggle
 menuToggle.addEventListener('click', () => {
     sidebar.classList.toggle('active');
@@ -25,6 +30,12 @@ document.addEventListener('click', (e) => {
 navItems.forEach(item => {
     item.addEventListener('click', (e) => {
         e.preventDefault();
+        
+        // Don't interfere if a Quick Action is active
+        if (window.quickActionActive) {
+            console.log('Sidebar navigation blocked - Quick Action active');
+            return;
+        }
         
         // Remove active class from all nav items
         navItems.forEach(nav => nav.classList.remove('active'));
@@ -51,14 +62,38 @@ navItems.forEach(item => {
         // Show/hide content based on selected page
         if (page === 'dashboard') {
             dashboardContent.style.display = 'flex';
-            pageContents.forEach(content => content.style.display = 'none');
+            pageContents.forEach(content => {
+                content.style.display = 'none';
+                content.classList.remove('show');
+            });
         } else {
             dashboardContent.style.display = 'none';
-            pageContents.forEach(content => content.style.display = 'none');
+            pageContents.forEach(content => {
+                content.style.display = 'none';
+                content.classList.remove('show');
+            });
+            
+            // Specifically hide the Request Access content when navigating via sidebar
+            const requestAccessContent = document.getElementById('requestAccessContent');
+            if (requestAccessContent && !requestAccessContent.hasAttribute('data-quick-action-active')) {
+                requestAccessContent.style.display = 'none';
+                requestAccessContent.classList.remove('show');
+            }
             
             const targetContent = document.getElementById(`${page}Content`);
             if (targetContent) {
                 targetContent.style.display = 'block';
+                console.log(`Showing ${page}Content, hiding requestAccessContent`);
+                
+                // Special handling for requests page to ensure Request Access content is hidden
+                if (page === 'requests') {
+                    const requestAccessContent = document.getElementById('requestAccessContent');
+                    if (requestAccessContent) {
+                        requestAccessContent.style.display = 'none';
+                        requestAccessContent.classList.remove('show');
+                        console.log('Explicitly hiding requestAccessContent for requests page');
+                    }
+                }
             }
         }
         
@@ -84,8 +119,11 @@ navItems.forEach(item => {
 
 // Quick Action buttons functionality
 quickActionBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         const action = btn.getAttribute('data-action');
+        console.log('Quick Action triggered:', action);
         handleQuickAction(action);
     });
 });
@@ -97,18 +135,82 @@ function handleQuickAction(action) {
             // Navigate to Request Access page
             console.log('Request Access clicked');
             pageTitle.textContent = 'Request Access';
-            dashboardContent.style.display = 'none';
-            pageContents.forEach(content => content.style.display = 'none');
             
-            const requestAccessContent = document.getElementById('requestAccessContent');
-            console.log('Found requestAccessContent:', !!requestAccessContent);
-            if (requestAccessContent) {
-                requestAccessContent.style.display = 'block';
-                console.log('Set requestAccessContent display to block');
+            // Hide dashboard and all other page contents (except requestAccessContent)
+            dashboardContent.style.display = 'none';
+            pageContents.forEach(content => {
+                if (content.id !== 'requestAccessContent') {
+                    content.style.display = 'none';
+                    content.classList.remove('show');
+                    console.log('Hiding content:', content.id);
+                }
+            });
+            
+            // Specifically hide the Access Requests content (requestsContent)
+            const requestsContent = document.getElementById('requestsContent');
+            if (requestsContent) {
+                requestsContent.style.display = 'none';
+                console.log('Hiding requestsContent');
             }
             
-            // Update active nav item
+            // Show the Request Access content
+            const requestAccessContent = document.getElementById('requestAccessContent');
+            console.log('Found requestAccessContent:', !!requestAccessContent);
+            
+            if (requestAccessContent) {
+                requestAccessContent.style.display = 'block';
+                requestAccessContent.classList.add('show');
+                console.log('Showing requestAccessContent');
+                console.log('requestAccessContent computed style:', window.getComputedStyle(requestAccessContent).display);
+                console.log('requestAccessContent offsetHeight:', requestAccessContent.offsetHeight);
+                console.log('requestAccessContent offsetWidth:', requestAccessContent.offsetWidth);
+                console.log('requestAccessContent visibility:', window.getComputedStyle(requestAccessContent).visibility);
+                console.log('requestAccessContent opacity:', window.getComputedStyle(requestAccessContent).opacity);
+                console.log('requestAccessContent innerHTML length:', requestAccessContent.innerHTML.length);
+                
+                // Force visible styles with strong CSS
+                requestAccessContent.style.visibility = 'visible';
+                requestAccessContent.style.opacity = '1';
+                requestAccessContent.style.height = 'auto';
+                requestAccessContent.style.overflow = 'visible';
+                requestAccessContent.style.position = 'relative';
+                requestAccessContent.style.zIndex = '1000';
+                requestAccessContent.style.backgroundColor = 'white';
+                requestAccessContent.style.border = '3px solid red'; // Debug border
+                
+                // Mark this element as protected from sidebar navigation
+                requestAccessContent.setAttribute('data-quick-action-active', 'true');
+                
+                // Remove the protection after a delay
+                setTimeout(() => {
+                    requestAccessContent.removeAttribute('data-quick-action-active');
+                }, 500);
+            } else {
+                console.error('requestAccessContent not found!');
+            }
+            
+            // DEBUG: Try to show ALL content to see what happens
+            setTimeout(() => {
+                const allPageContents = document.querySelectorAll('.page-content');
+                console.log('All page contents:', Array.from(allPageContents).map(el => ({ id: el.id, display: el.style.display, computed: window.getComputedStyle(el).display })));
+                
+                // Force show the requestAccessContent one more time
+                const testElement = document.getElementById('requestAccessContent');
+                if (testElement) {
+                    testElement.style.cssText = 'display: block !important; visibility: visible !important; opacity: 1 !important; position: relative !important; z-index: 9999 !important; background: yellow !important; min-height: 500px !important;';
+                    console.log('Applied emergency CSS to requestAccessContent');
+                }
+            }, 200);
+            
+            // Remove active class from all nav items (since this is a Quick Action, not sidebar nav)
             navItems.forEach(nav => nav.classList.remove('active'));
+            
+            // Set a flag to prevent sidebar navigation from interfering
+            window.quickActionActive = true;
+            setTimeout(() => {
+                window.quickActionActive = false;
+            }, 100);
+            
             showNotification('Browse available institutions and request access', 'info');
         },
         'renew-permissions': () => {

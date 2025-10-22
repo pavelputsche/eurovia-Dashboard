@@ -1619,10 +1619,14 @@ body {
 
 /* Request Access Page Styles */
 #requestAccessContent {
-    display: block !important;
+    display: none;
     padding: 20px;
     background: #f8f9fa;
     min-height: 100vh;
+}
+
+#requestAccessContent.show {
+    display: block !important;
 }
 
 #requestAccessContent .page-header {
