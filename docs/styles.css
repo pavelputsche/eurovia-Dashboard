@@ -1037,6 +1037,138 @@ body {
     }
 }
 
+/* Request Tabs */
+.request-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #e1e8ed;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #6c757d;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tab-btn:hover {
+    color: #667eea;
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.tab-btn.active {
+    color: #667eea;
+    border-bottom-color: #667eea;
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Spam Section Styles */
+.spam-info {
+    margin-bottom: 20px;
+}
+
+.spam-warning {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #856404;
+    font-size: 0.9rem;
+}
+
+.spam-warning i {
+    color: #ffc107;
+    font-size: 1.1rem;
+}
+
+.permission-card.spam {
+    border-left: 4px solid #dc3545;
+    background: #fff5f5;
+    position: relative;
+}
+
+.request-badge.spam {
+    background: #dc3545;
+    color: white;
+    animation: pulse 2s infinite;
+}
+
+.verification-badge.unverified {
+    color: #ffc107;
+}
+
+.verification-badge.unverified i {
+    color: #ffc107;
+}
+
+.spam-flags {
+    margin-top: 15px;
+    padding: 12px;
+    background: rgba(220, 53, 69, 0.1);
+    border-radius: 6px;
+    border-left: 3px solid #dc3545;
+}
+
+.flag-item {
+    font-size: 0.85rem;
+    color: #721c24;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.flag-item:last-child {
+    margin-bottom: 0;
+}
+
+.institution-logo.suspicious {
+    background: #dc3545;
+}
+
+.institution-logo.crypto-fake {
+    background: #6f42c1;
+}
+
+/* Responsive adjustments for tabs */
+@media (max-width: 768px) {
+    .request-tabs {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .tab-btn {
+        text-align: left;
+        border-bottom: none;
+        border-left: 3px solid transparent;
+    }
+    
+    .tab-btn.active {
+        border-bottom: none;
+        border-left-color: #667eea;
+    }
+}
+
 /* Revoked Access Page Styles */
 .revoked-header {
     display: flex;

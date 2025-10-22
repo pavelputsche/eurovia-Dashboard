@@ -306,6 +306,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Initialize permission cards functionality
     initializePermissionCards();
+    
+    // Initialize request tabs
+    initializeRequestTabs();
 });
 
 // Permission Cards Functionality
@@ -632,5 +635,44 @@ window.addEventListener('resize', () => {
         // Handle resize logic here if needed
     }, 250);
 });
+
+// Request Tabs Functionality
+function initializeRequestTabs() {
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetTab = button.getAttribute('data-tab');
+            
+            // Remove active class from all tabs and contents
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+                content.style.display = 'none';
+            });
+            
+            // Add active class to clicked tab
+            button.classList.add('active');
+            
+            // Show corresponding content
+            const targetContent = document.getElementById(`${targetTab}-tab`);
+            if (targetContent) {
+                targetContent.classList.add('active');
+                targetContent.style.display = 'block';
+                
+                // Add animation
+                targetContent.style.opacity = '0';
+                targetContent.style.transform = 'translateY(10px)';
+                
+                setTimeout(() => {
+                    targetContent.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                    targetContent.style.opacity = '1';
+                    targetContent.style.transform = 'translateY(0)';
+                }, 50);
+            }
+        });
+    });
+}
 
 console.log('Eurovia Banking Dashboard loaded successfully!');

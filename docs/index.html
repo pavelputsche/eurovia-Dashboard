@@ -447,7 +447,21 @@
                     </div>
                 </div>
 
-                <div class="requests-grid">
+                <!-- Request Tabs -->
+                <div class="request-tabs">
+                    <button class="tab-btn active" data-tab="pending">
+                        <i class="fas fa-inbox"></i>
+                        Pending (3)
+                    </button>
+                    <button class="tab-btn" data-tab="spam">
+                        <i class="fas fa-shield-alt"></i>
+                        Spam (2)
+                    </button>
+                </div>
+
+                <!-- Pending Requests Tab -->
+                <div class="tab-content active" id="pending-tab">
+                    <div class="requests-grid">
                     <!-- Deutsche Rentenversicherung -->
                     <div class="permission-card request">
                         <div class="permission-header">
@@ -556,6 +570,94 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Spam Requests Tab -->
+                <div class="tab-content" id="spam-tab" style="display: none;">
+                    <div class="spam-info">
+                        <div class="spam-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>These requests are from unverified sources and have been automatically flagged as potential spam.</span>
+                        </div>
+                    </div>
+                    
+                    <div class="requests-grid">
+                        <!-- Fake Investment Platform -->
+                        <div class="permission-card request spam">
+                            <div class="permission-header">
+                                <div class="institution-info">
+                                    <div class="institution-logo suspicious">SUS</div>
+                                    <div class="institution-details">
+                                        <h3>QuickRich Investment</h3>
+                                        <div class="verification-badge unverified">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                            <span>Unverified</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="request-badge spam">Spam</div>
+                            </div>
+                            
+                            <div class="permission-details">
+                                <div class="permission-type">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    <span>Complete Financial Profile & Investment History</span>
+                                </div>
+                                <div class="permission-duration">
+                                    <span>Requested: 19.10.2025</span>
+                                    <span>Duration: Indefinite</span>
+                                </div>
+                                <div class="spam-flags">
+                                    <div class="flag-item">⚠️ Unverified domain</div>
+                                    <div class="flag-item">⚠️ Suspicious request pattern</div>
+                                    <div class="flag-item">⚠️ Excessive permissions requested</div>
+                                </div>
+                            </div>
+                            
+                            <div class="permission-actions">
+                                <button class="btn-approve">Allow Request</button>
+                                <button class="btn-block">Block Permanently</button>
+                            </div>
+                        </div>
+
+                        <!-- Crypto Mining Service -->
+                        <div class="permission-card request spam">
+                            <div class="permission-header">
+                                <div class="institution-info">
+                                    <div class="institution-logo crypto-fake">MIN</div>
+                                    <div class="institution-details">
+                                        <h3>CryptoMiner Express</h3>
+                                        <div class="verification-badge unverified">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                            <span>Unverified</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="request-badge spam">Spam</div>
+                            </div>
+                            
+                            <div class="permission-details">
+                                <div class="permission-type">
+                                    <i class="fas fa-coins"></i>
+                                    <span>Account Access & Transaction Authorization</span>
+                                </div>
+                                <div class="permission-duration">
+                                    <span>Requested: 21.10.2025</span>
+                                    <span>Duration: Permanent</span>
+                                </div>
+                                <div class="spam-flags">
+                                    <div class="flag-item">⚠️ No business license found</div>
+                                    <div class="flag-item">⚠️ Requesting transaction authorization</div>
+                                    <div class="flag-item">⚠️ Recent domain registration</div>
+                                </div>
+                            </div>
+                            
+                            <div class="permission-actions">
+                                <button class="btn-approve">Allow Request</button>
+                                <button class="btn-block">Block Permanently</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="page-content" id="revokedContent" style="display: none;">
@@ -594,9 +696,6 @@
                                     <span>Requested: 15.10.2025</span>
                                     <span>Denied: 16.10.2025</span>
                                 </div>
-                                <div class="revoked-reason">
-                                    <strong>Reason:</strong> Too broad access requested for loan purpose
-                                </div>
                             </div>
                         </div>
                         
@@ -631,9 +730,6 @@
                                 <div class="revoked-date">
                                     <span>Active: 01.03.2025 - 20.10.2025</span>
                                     <span>Revoked: 20.10.2025</span>
-                                </div>
-                                <div class="revoked-reason">
-                                    <strong>Reason:</strong> Privacy concerns about data usage
                                 </div>
                             </div>
                         </div>
@@ -670,9 +766,6 @@
                                     <span>Requested: 12.10.2025</span>
                                     <span>Denied: 12.10.2025</span>
                                 </div>
-                                <div class="revoked-reason">
-                                    <strong>Reason:</strong> Unverified service, security risk
-                                </div>
                             </div>
                         </div>
                         
@@ -708,9 +801,6 @@
                                     <span>Active: 01.01.2024 - 15.09.2025</span>
                                     <span>Revoked: 15.09.2025</span>
                                 </div>
-                                <div class="revoked-reason">
-                                    <strong>Reason:</strong> Switched to new banking provider
-                                </div>
                             </div>
                         </div>
                         
@@ -745,9 +835,6 @@
                                 <div class="revoked-date">
                                     <span>Active: 10.08.2025 - 18.10.2025</span>
                                     <span>Revoked: 18.10.2025</span>
-                                </div>
-                                <div class="revoked-reason">
-                                    <strong>Reason:</strong> Excessive transaction fees
                                 </div>
                             </div>
                         </div>
