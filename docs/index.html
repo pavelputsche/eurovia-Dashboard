@@ -476,6 +476,9 @@
                                 </div>
                             </div>
                             <div class="request-badge new">New Request</div>
+                            <button class="btn-info" onclick="showRequestInfo('drv')">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
                         </div>
                         
                         <div class="permission-details">
@@ -512,6 +515,9 @@
                                 </div>
                             </div>
                             <div class="request-badge">Pending</div>
+                            <button class="btn-info" onclick="showRequestInfo('investment')">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
                         </div>
                         
                         <div class="permission-details">
@@ -548,6 +554,9 @@
                                 </div>
                             </div>
                             <div class="request-badge">Pending</div>
+                            <button class="btn-info" onclick="showRequestInfo('crypto')">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
                         </div>
                         
                         <div class="permission-details">
@@ -595,6 +604,9 @@
                                     </div>
                                 </div>
                                 <div class="request-badge spam">Spam</div>
+                                <button class="btn-info" onclick="showRequestInfo('quickrich')">
+                                    <i class="fas fa-info-circle"></i>
+                                </button>
                             </div>
                             
                             <div class="permission-details">
@@ -862,6 +874,19 @@
                 <p>Settings content will be displayed here.</p>
             </div>
         </main>
+    </div>
+
+    <!-- Info Modal -->
+    <div id="infoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Request Information</h3>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>

@@ -677,4 +677,156 @@ function initializeRequestTabs() {
     });
 }
 
+// Request Info Modal Functionality
+function showRequestInfo(requestType) {
+    const modal = document.getElementById('infoModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+    
+    const requestData = {
+        drv: {
+            title: "Deutsche Rentenversicherung",
+            company: "German Pension Insurance",
+            verification: "Verified Government Entity",
+            purpose: "Pension Calculation & Management",
+            dataAccess: [
+                "Investment portfolio overview",
+                "Account balance information", 
+                "Transaction history (last 12 months)",
+                "Personal identification data"
+            ],
+            securityLevel: "High - Government Entity",
+            duration: "1 Year",
+            autoRenewal: "Manual approval required",
+            riskLevel: "Low",
+            description: "The German Pension Insurance requires access to your investment portfolio to accurately calculate your future pension benefits. This is a legitimate government request required for pension planning.",
+            moreInfoLink: "https://www.deutsche-rentenversicherung.de/DRV/DE/Home/home_node.html",
+            moreInfoText: "Visit the official Deutsche Rentenversicherung website"
+        },
+        investment: {
+            title: "Investment Advisor Pro",
+            company: "FinTech Solutions GmbH",
+            verification: "Licensed Investment Advisor",
+            purpose: "Portfolio Analysis & Investment Recommendations",
+            dataAccess: [
+                "Portfolio performance metrics",
+                "Investment allocation data",
+                "Historical transaction data",
+                "Risk tolerance profile"
+            ],
+            securityLevel: "Medium - Licensed Provider",
+            duration: "1 Year",
+            autoRenewal: "Automatic with 30-day notice",
+            riskLevel: "Medium",
+            description: "Investment Advisor Pro is a licensed financial advisor that provides personalized investment recommendations based on your portfolio performance and risk profile. They are regulated by BaFin.",
+            moreInfoLink: "https://www.bafin.de/EN/Homepage/homepage_node.html",
+            moreInfoText: "Learn more about BaFin regulation and licensed advisors"
+        },
+        crypto: {
+            title: "Crypto Portfolio Tracker",
+            company: "CryptoAnalytics Ltd",
+            verification: "Verified Cryptocurrency Service",
+            purpose: "Cryptocurrency Portfolio Management",
+            dataAccess: [
+                "Cryptocurrency transaction history",
+                "Digital wallet balances",
+                "Trading activity data",
+                "Portfolio allocation metrics"
+            ],
+            securityLevel: "Medium - Verified Service",
+            duration: "6 Months",
+            autoRenewal: "Manual approval required",
+            riskLevel: "Medium",
+            description: "Crypto Portfolio Tracker helps you monitor and analyze your cryptocurrency investments across multiple wallets and exchanges. They provide comprehensive portfolio analytics and tax reporting.",
+            moreInfoLink: "https://help.eurovia-bank.com/crypto-services",
+            moreInfoText: "View our approved cryptocurrency service providers"
+        },
+        quickrich: {
+            title: "QuickRich Investment",
+            company: "Unknown Entity",
+            verification: "⚠️ UNVERIFIED - POTENTIAL SCAM",
+            purpose: "Suspicious Financial Services",
+            dataAccess: [
+                "Complete financial profile",
+                "Investment history and holdings",
+                "Personal identification data",
+                "Account access credentials"
+            ],
+            securityLevel: "🚨 CRITICAL RISK - UNVERIFIED",
+            duration: "Indefinite",
+            autoRenewal: "Unknown terms",
+            riskLevel: "🚨 EXTREME RISK",
+            description: "⚠️ WARNING: QuickRich Investment is an unverified entity requesting extensive access to your financial data. This appears to be a fraudulent investment scheme. DO NOT APPROVE this request.",
+            moreInfoLink: "https://help.eurovia-bank.com/security/fraud-prevention",
+            moreInfoText: "Learn how to protect yourself from financial fraud"
+        }
+    };
+    
+    const data = requestData[requestType];
+    if (!data) return;
+    
+    modalTitle.textContent = data.title;
+    
+    const isSpam = requestType === 'quickrich';
+    const warningClass = isSpam ? 'danger' : '';
+    
+    modalBody.innerHTML = `
+        <div class="info-section">
+            <h4>Company Information</h4>
+            <ul class="info-list">
+                <li><strong>Organization:</strong> <span>${data.company}</span></li>
+                <li><strong>Verification Status:</strong> <span>${data.verification}</span></li>
+                <li><strong>Security Level:</strong> <span>${data.securityLevel}</span></li>
+            </ul>
+        </div>
+        
+        <div class="info-section">
+            <h4>Request Details</h4>
+            <ul class="info-list">
+                <li><strong>Purpose:</strong> <span>${data.purpose}</span></li>
+                <li><strong>Access Duration:</strong> <span>${data.duration}</span></li>
+                <li><strong>Auto-Renewal:</strong> <span>${data.autoRenewal}</span></li>
+                <li><strong>Risk Level:</strong> <span>${data.riskLevel}</span></li>
+            </ul>
+        </div>
+        
+        <div class="info-section">
+            <h4>Data Access Requested</h4>
+            <ul class="info-list">
+                ${data.dataAccess.map(item => `<li>• ${item}</li>`).join('')}
+            </ul>
+        </div>
+        
+        <div class="security-warning ${warningClass}">
+            <strong>${isSpam ? '🚨 SECURITY ALERT' : 'ℹ️ Information'}:</strong><br>
+            ${data.description}
+        </div>
+        
+        <div class="more-info-section">
+            <p><strong>For more information:</strong></p>
+            <a href="${data.moreInfoLink}" target="_blank" class="more-info-link">
+                <i class="fas fa-external-link-alt"></i>
+                ${data.moreInfoText}
+            </a>
+        </div>
+    `;
+    
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+    const modal = document.getElementById('infoModal');
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const modal = document.getElementById('infoModal');
+    if (event.target === modal) {
+        closeModal();
+    }
+}
+
 console.log('Eurovia Banking Dashboard loaded successfully!');
