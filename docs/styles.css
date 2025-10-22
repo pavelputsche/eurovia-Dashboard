@@ -1094,6 +1094,13 @@ body {
     display: block;
 }
 
+/* Ensure spam tab displays correctly */
+#spam-tab.active {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
 /* Spam Section Styles */
 .spam-info {
     margin-bottom: 20px;

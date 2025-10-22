@@ -657,9 +657,11 @@ function initializeRequestTabs() {
             
             // Show corresponding content
             const targetContent = document.getElementById(`${targetTab}-tab`);
+            console.log('Looking for tab:', `${targetTab}-tab`, 'Found:', targetContent);
             if (targetContent) {
                 targetContent.classList.add('active');
                 targetContent.style.display = 'block';
+                console.log('Showing tab content for:', targetTab);
                 
                 // Add animation
                 targetContent.style.opacity = '0';
