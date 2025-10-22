@@ -923,6 +923,331 @@ body {
     }
 }
 
+/* Access Requests Page Styles */
+.requests-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e1e8ed;
+}
+
+.requests-summary {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.pending-requests {
+    background: #ffc107;
+    color: #856404;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.awaiting-review {
+    background: #dc3545;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.requests-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 20px;
+}
+
+.permission-card.request {
+    border-left: 4px solid #ffc107;
+    background: #fffbf0;
+}
+
+.request-badge {
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background: #ffc107;
+    color: #856404;
+}
+
+.request-badge.new {
+    background: #dc3545;
+    color: white;
+    animation: pulse 2s infinite;
+}
+
+.request-details {
+    margin-top: 15px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 6px;
+    border-left: 3px solid #667eea;
+}
+
+.request-details p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.5;
+}
+
+.permission-duration span {
+    display: block;
+    margin-bottom: 3px;
+}
+
+.institution-logo.crypto {
+    background: #f7931a;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(220, 53, 69, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+    }
+}
+
+/* Responsive adjustments for requests */
+@media (max-width: 768px) {
+    .requests-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .requests-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+    
+    .requests-summary {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+
+/* Revoked Access Page Styles */
+.revoked-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e1e8ed;
+}
+
+.revoked-summary {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.total-revoked {
+    background: #6c757d;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.denied-requests {
+    background: #dc3545;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.revoked-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 20px;
+}
+
+.permission-card.revoked {
+    border-left: 4px solid #6c757d;
+    background: #f8f9fa;
+    opacity: 0.9;
+}
+
+.permission-card.revoked.denied {
+    border-left: 4px solid #dc3545;
+    background: #fff5f5;
+}
+
+.revoked-status {
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.revoked-status.revoked {
+    background: #e2e3e5;
+    color: #495057;
+}
+
+.revoked-status.denied {
+    background: #f5c6cb;
+    color: #721c24;
+}
+
+.revoked-info {
+    margin-top: 15px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 6px;
+    border-left: 3px solid #6c757d;
+}
+
+.permission-card.revoked.denied .revoked-info {
+    border-left-color: #dc3545;
+}
+
+.revoked-date {
+    margin-bottom: 10px;
+}
+
+.revoked-date span {
+    display: block;
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 3px;
+}
+
+.revoked-reason {
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.4;
+}
+
+.revoked-reason strong {
+    color: #333;
+}
+
+/* Additional institution logos */
+.institution-logo.loan {
+    background: #17a2b8;
+}
+
+.institution-logo.marketing {
+    background: #e83e8c;
+}
+
+.institution-logo.social {
+    background: #6f42c1;
+}
+
+.institution-logo.oldbank {
+    background: #495057;
+}
+
+.institution-logo.gaming {
+    background: #fd7e14;
+}
+
+/* Revoked action buttons */
+.btn-review {
+    background: #17a2b8;
+    color: white;
+}
+
+.btn-review:hover {
+    background: #138496;
+    transform: translateY(-1px);
+}
+
+.btn-allow {
+    background: #28a745;
+    color: white;
+}
+
+.btn-allow:hover {
+    background: #218838;
+    transform: translateY(-1px);
+}
+
+.btn-restore {
+    background: #28a745;
+    color: white;
+}
+
+.btn-restore:hover {
+    background: #218838;
+    transform: translateY(-1px);
+}
+
+.btn-block {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-block:hover {
+    background: #c82333;
+    transform: translateY(-1px);
+}
+
+.btn-delete {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-delete:hover {
+    background: #5a6268;
+    transform: translateY(-1px);
+}
+
+.btn-unblock {
+    background: #ffc107;
+    color: #856404;
+}
+
+.btn-unblock:hover {
+    background: #e0a800;
+    transform: translateY(-1px);
+}
+
+.revoked-status.blocked {
+    background: #343a40;
+    color: white;
+}
+
+/* Unverified badge styling */
+.verification-badge i.fa-exclamation-triangle {
+    color: #ffc107;
+}
+
+/* Responsive adjustments for revoked */
+@media (max-width: 768px) {
+    .revoked-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .revoked-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+    
+    .revoked-summary {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+
 /* Loading Animation */
 @keyframes fadeIn {
     from {

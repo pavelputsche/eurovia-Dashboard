@@ -60,6 +60,10 @@
                         <i class="fas fa-inbox"></i>
                         <span>Access Requests</span>
                     </a>
+                    <a href="#" class="nav-item" data-page="revoked">
+                        <i class="fas fa-ban"></i>
+                        <span>Revoked Access</span>
+                    </a>
                     <a href="#" class="nav-item" data-page="apps">
                         <i class="fas fa-plug"></i>
                         <span>Connected Apps</span>
@@ -298,48 +302,12 @@
                 <div class="permissions-header">
                     <h2>My Permissions</h2>
                     <div class="permissions-summary">
-                        <span class="total-permissions">12 Active Permissions</span>
-                        <span class="expiring-soon">3 Expiring Soon</span>
+                        <span class="total-permissions">9 Active Permissions</span>
+                        <span class="expiring-soon">2 Expiring Soon</span>
                     </div>
                 </div>
 
                 <div class="permissions-grid">
-                    <!-- Deutsche Rentenversicherung -->
-                    <div class="permission-card">
-                        <div class="permission-header">
-                            <div class="institution-info">
-                                <div class="institution-logo drv">DRV</div>
-                                <div class="institution-details">
-                                    <h3>Deutsche Rentenversicherung</h3>
-                                    <div class="verification-badge">
-                                        <i class="fas fa-check-circle"></i>
-                                        <span>Verified</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="permission-menu">
-                                <button class="menu-btn">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="permission-details">
-                            <div class="permission-type">
-                                <i class="fas fa-chart-line"></i>
-                                <span>Möchte Ihr Depot einsehen</span>
-                            </div>
-                            <div class="permission-duration">
-                                <span>14.10.2025 - 14.10.2026</span>
-                            </div>
-                        </div>
-                        
-                        <div class="permission-actions">
-                            <button class="btn-approve">Zugriff gewähren</button>
-                            <button class="btn-decline">Ablehnen</button>
-                        </div>
-                    </div>
-
                     <!-- PaymentApp Pro -->
                     <div class="permission-card active">
                         <div class="permission-header">
@@ -401,42 +369,6 @@
                         <div class="permission-actions">
                             <button class="btn-renew">Renew Access</button>
                             <button class="btn-revoke">Revoke</button>
-                        </div>
-                    </div>
-
-                    <!-- Investment Advisor -->
-                    <div class="permission-card">
-                        <div class="permission-header">
-                            <div class="institution-info">
-                                <div class="institution-logo invest">INV</div>
-                                <div class="institution-details">
-                                    <h3>Investment Advisor Pro</h3>
-                                    <div class="verification-badge">
-                                        <i class="fas fa-check-circle"></i>
-                                        <span>Verified</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="permission-menu">
-                                <button class="menu-btn">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="permission-details">
-                            <div class="permission-type">
-                                <i class="fas fa-chart-area"></i>
-                                <span>Portfolio Overview & Performance</span>
-                            </div>
-                            <div class="permission-duration">
-                                <span>20.09.2025 - 20.09.2026</span>
-                            </div>
-                        </div>
-                        
-                        <div class="permission-actions">
-                            <button class="btn-approve">Grant Access</button>
-                            <button class="btn-decline">Decline</button>
                         </div>
                     </div>
 
@@ -507,8 +439,325 @@
             </div>
 
             <div class="page-content" id="requestsContent" style="display: none;">
-                <h2>Access Requests</h2>
-                <p>Access requests content will be displayed here.</p>
+                <div class="requests-header">
+                    <h2>Access Requests</h2>
+                    <div class="requests-summary">
+                        <span class="pending-requests">3 Pending Requests</span>
+                        <span class="awaiting-review">Awaiting Your Review</span>
+                    </div>
+                </div>
+
+                <div class="requests-grid">
+                    <!-- Deutsche Rentenversicherung -->
+                    <div class="permission-card request">
+                        <div class="permission-header">
+                            <div class="institution-info">
+                                <div class="institution-logo drv">DRV</div>
+                                <div class="institution-details">
+                                    <h3>Deutsche Rentenversicherung</h3>
+                                    <div class="verification-badge">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Verified</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="request-badge new">New Request</div>
+                        </div>
+                        
+                        <div class="permission-details">
+                            <div class="permission-type">
+                                <i class="fas fa-chart-line"></i>
+                                <span>Möchte Ihr Depot einsehen</span>
+                            </div>
+                            <div class="permission-duration">
+                                <span>Requested: 14.10.2025</span>
+                                <span>Duration: 1 year</span>
+                            </div>
+                            <div class="request-details">
+                                <p>Deutsche Rentenversicherung is requesting access to view your investment portfolio for pension calculation purposes.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-actions">
+                            <button class="btn-approve">Zugriff gewähren</button>
+                            <button class="btn-decline">Ablehnen</button>
+                        </div>
+                    </div>
+
+                    <!-- Investment Advisor -->
+                    <div class="permission-card request">
+                        <div class="permission-header">
+                            <div class="institution-info">
+                                <div class="institution-logo invest">INV</div>
+                                <div class="institution-details">
+                                    <h3>Investment Advisor Pro</h3>
+                                    <div class="verification-badge">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Verified</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="request-badge">Pending</div>
+                        </div>
+                        
+                        <div class="permission-details">
+                            <div class="permission-type">
+                                <i class="fas fa-chart-area"></i>
+                                <span>Portfolio Overview & Performance</span>
+                            </div>
+                            <div class="permission-duration">
+                                <span>Requested: 20.09.2025</span>
+                                <span>Duration: 1 year</span>
+                            </div>
+                            <div class="request-details">
+                                <p>Investment Advisor Pro wants to analyze your portfolio performance and provide personalized investment recommendations.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-actions">
+                            <button class="btn-approve">Grant Access</button>
+                            <button class="btn-decline">Decline</button>
+                        </div>
+                    </div>
+
+                    <!-- Crypto Portfolio Tracker -->
+                    <div class="permission-card request">
+                        <div class="permission-header">
+                            <div class="institution-info">
+                                <div class="institution-logo crypto">CRY</div>
+                                <div class="institution-details">
+                                    <h3>Crypto Portfolio Tracker</h3>
+                                    <div class="verification-badge">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Verified</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="request-badge">Pending</div>
+                        </div>
+                        
+                        <div class="permission-details">
+                            <div class="permission-type">
+                                <i class="fas fa-coins"></i>
+                                <span>Cryptocurrency Holdings & Transactions</span>
+                            </div>
+                            <div class="permission-duration">
+                                <span>Requested: 18.10.2025</span>
+                                <span>Duration: 6 months</span>
+                            </div>
+                            <div class="request-details">
+                                <p>Crypto Portfolio Tracker requests access to your cryptocurrency transactions for comprehensive portfolio analysis.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-actions">
+                            <button class="btn-approve">Grant Access</button>
+                            <button class="btn-decline">Decline</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-content" id="revokedContent" style="display: none;">
+                <div class="revoked-header">
+                    <h2>Revoked Access</h2>
+                    <div class="revoked-summary">
+                        <span class="total-revoked">5 Revoked Permissions</span>
+                        <span class="denied-requests">2 Denied Requests</span>
+                    </div>
+                </div>
+
+                <div class="revoked-grid">
+                    <!-- Loan Application Service (Denied) -->
+                    <div class="permission-card revoked denied">
+                        <div class="permission-header">
+                            <div class="institution-info">
+                                <div class="institution-logo loan">LOA</div>
+                                <div class="institution-details">
+                                    <h3>Loan Application Service</h3>
+                                    <div class="verification-badge">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Verified</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="revoked-status denied">Denied</div>
+                        </div>
+                        
+                        <div class="permission-details">
+                            <div class="permission-type">
+                                <i class="fas fa-money-check-alt"></i>
+                                <span>Complete Financial History & Credit Score</span>
+                            </div>
+                            <div class="revoked-info">
+                                <div class="revoked-date">
+                                    <span>Requested: 15.10.2025</span>
+                                    <span>Denied: 16.10.2025</span>
+                                </div>
+                                <div class="revoked-reason">
+                                    <strong>Reason:</strong> Too broad access requested for loan purpose
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-actions">
+                            <button class="btn-review">Review Decision</button>
+                            <button class="btn-allow">Allow Request</button>
+                        </div>
+                    </div>
+
+                    <!-- Marketing Analytics (Revoked) -->
+                    <div class="permission-card revoked">
+                        <div class="permission-header">
+                            <div class="institution-info">
+                                <div class="institution-logo marketing">MAR</div>
+                                <div class="institution-details">
+                                    <h3>Marketing Analytics Pro</h3>
+                                    <div class="verification-badge">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Verified</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="revoked-status revoked">Revoked</div>
+                        </div>
+                        
+                        <div class="permission-details">
+                            <div class="permission-type">
+                                <i class="fas fa-chart-bar"></i>
+                                <span>Transaction Categories & Spending Patterns</span>
+                            </div>
+                            <div class="revoked-info">
+                                <div class="revoked-date">
+                                    <span>Active: 01.03.2025 - 20.10.2025</span>
+                                    <span>Revoked: 20.10.2025</span>
+                                </div>
+                                <div class="revoked-reason">
+                                    <strong>Reason:</strong> Privacy concerns about data usage
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-actions">
+                            <button class="btn-review">View History</button>
+                            <button class="btn-restore">Restore Access</button>
+                        </div>
+                    </div>
+
+                    <!-- Social Media Aggregator (Denied) -->
+                    <div class="permission-card revoked denied">
+                        <div class="permission-header">
+                            <div class="institution-info">
+                                <div class="institution-logo social">SOC</div>
+                                <div class="institution-details">
+                                    <h3>Social Media Aggregator</h3>
+                                    <div class="verification-badge">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        <span>Unverified</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="revoked-status denied">Denied</div>
+                        </div>
+                        
+                        <div class="permission-details">
+                            <div class="permission-type">
+                                <i class="fas fa-share-alt"></i>
+                                <span>Account Balance & Transaction History</span>
+                            </div>
+                            <div class="revoked-info">
+                                <div class="revoked-date">
+                                    <span>Requested: 12.10.2025</span>
+                                    <span>Denied: 12.10.2025</span>
+                                </div>
+                                <div class="revoked-reason">
+                                    <strong>Reason:</strong> Unverified service, security risk
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-actions">
+                            <button class="btn-review">Review Decision</button>
+                            <button class="btn-block">Block Permanently</button>
+                        </div>
+                    </div>
+
+                    <!-- Old Banking App (Revoked) -->
+                    <div class="permission-card revoked">
+                        <div class="permission-header">
+                            <div class="institution-info">
+                                <div class="institution-logo oldbank">OLD</div>
+                                <div class="institution-details">
+                                    <h3>Old Banking App</h3>
+                                    <div class="verification-badge">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Verified</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="revoked-status revoked">Revoked</div>
+                        </div>
+                        
+                        <div class="permission-details">
+                            <div class="permission-type">
+                                <i class="fas fa-university"></i>
+                                <span>Full Account Access & Transaction Management</span>
+                            </div>
+                            <div class="revoked-info">
+                                <div class="revoked-date">
+                                    <span>Active: 01.01.2024 - 15.09.2025</span>
+                                    <span>Revoked: 15.09.2025</span>
+                                </div>
+                                <div class="revoked-reason">
+                                    <strong>Reason:</strong> Switched to new banking provider
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-actions">
+                            <button class="btn-review">View History</button>
+                            <button class="btn-delete">Delete Record</button>
+                        </div>
+                    </div>
+
+                    <!-- Gaming Platform (Revoked) -->
+                    <div class="permission-card revoked">
+                        <div class="permission-header">
+                            <div class="institution-info">
+                                <div class="institution-logo gaming">GAM</div>
+                                <div class="institution-details">
+                                    <h3>Gaming Platform Pay</h3>
+                                    <div class="verification-badge">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Verified</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="revoked-status revoked">Revoked</div>
+                        </div>
+                        
+                        <div class="permission-details">
+                            <div class="permission-type">
+                                <i class="fas fa-gamepad"></i>
+                                <span>Payment Processing & Balance Check</span>
+                            </div>
+                            <div class="revoked-info">
+                                <div class="revoked-date">
+                                    <span>Active: 10.08.2025 - 18.10.2025</span>
+                                    <span>Revoked: 18.10.2025</span>
+                                </div>
+                                <div class="revoked-reason">
+                                    <strong>Reason:</strong> Excessive transaction fees
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-actions">
+                            <button class="btn-review">View History</button>
+                            <button class="btn-restore">Restore Access</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="page-content" id="appsContent" style="display: none;">

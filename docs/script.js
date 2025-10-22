@@ -40,6 +40,7 @@ navItems.forEach(item => {
             'dashboard': 'Dashboard',
             'permissions': 'My Permissions',
             'requests': 'Access Requests',
+            'revoked': 'Revoked Access',
             'apps': 'Connected Apps',
             'activity': 'Activity Log',
             'settings': 'Settings'
@@ -323,6 +324,18 @@ function initializePermissionCards() {
             handlePermissionAction('renew', e.target);
         } else if (e.target.classList.contains('menu-btn')) {
             handleMenuClick(e.target);
+        } else if (e.target.classList.contains('btn-review')) {
+            handleRevokedAction('review', e.target);
+        } else if (e.target.classList.contains('btn-allow')) {
+            handleRevokedAction('allow', e.target);
+        } else if (e.target.classList.contains('btn-restore')) {
+            handleRevokedAction('restore', e.target);
+        } else if (e.target.classList.contains('btn-block')) {
+            handleRevokedAction('block', e.target);
+        } else if (e.target.classList.contains('btn-delete')) {
+            handleRevokedAction('delete', e.target);
+        } else if (e.target.classList.contains('btn-unblock')) {
+            handleRevokedAction('unblock', e.target);
         }
     });
     
@@ -420,6 +433,90 @@ function handlePermissionAction(action, button) {
                 actionsDiv.innerHTML = `
                     <button class="btn-manage">Manage Access</button>
                     <button class="btn-revoke">Revoke</button>
+                `;
+            }
+            break;
+    }
+}
+
+function handleRevokedAction(action, button) {
+    const card = button.closest('.permission-card');
+    const institutionName = card.querySelector('.institution-details h3').textContent;
+    
+    switch (action) {
+        case 'review':
+            showNotification(`Opening detailed review for ${institutionName}`, 'info');
+            break;
+            
+        case 'allow':
+            if (confirm(`Allow the request from ${institutionName}? This will grant them the requested permissions.`)) {
+                showNotification(`Request approved for ${institutionName}`, 'success');
+                // Remove the card and potentially move to active permissions
+                card.style.transform = 'translateX(100%)';
+                card.style.opacity = '0';
+                setTimeout(() => {
+                    card.remove();
+                }, 300);
+            }
+            break;
+            
+        case 'restore':
+            if (confirm(`Restore access for ${institutionName}? This will reactivate their permissions.`)) {
+                showNotification(`Access restored for ${institutionName}`, 'success');
+                // Remove the card from revoked list
+                card.style.transform = 'translateX(100%)';
+                card.style.opacity = '0';
+                setTimeout(() => {
+                    card.remove();
+                }, 300);
+            }
+            break;
+            
+        case 'block':
+            if (confirm(`Permanently block ${institutionName}? They will not be able to request access again.`)) {
+                showNotification(`${institutionName} has been permanently blocked`, 'warning');
+                // Update card to show blocked status
+                const statusElement = card.querySelector('.revoked-status');
+                statusElement.className = 'revoked-status blocked';
+                statusElement.textContent = 'Blocked';
+                statusElement.style.background = '#343a40';
+                statusElement.style.color = 'white';
+                
+                // Update action buttons
+                const actionsDiv = card.querySelector('.permission-actions');
+                actionsDiv.innerHTML = `
+                    <button class="btn-review">View History</button>
+                    <button class="btn-unblock">Unblock</button>
+                `;
+            }
+            break;
+            
+        case 'delete':
+            if (confirm(`Permanently delete the record for ${institutionName}? This action cannot be undone.`)) {
+                showNotification(`Record deleted for ${institutionName}`, 'warning');
+                card.style.transform = 'scale(0)';
+                card.style.opacity = '0';
+                setTimeout(() => {
+                    card.remove();
+                }, 300);
+            }
+            break;
+            
+        case 'unblock':
+            if (confirm(`Unblock ${institutionName}? They will be able to request access again.`)) {
+                showNotification(`${institutionName} has been unblocked`, 'success');
+                // Update card back to denied status
+                const statusElement = card.querySelector('.revoked-status');
+                statusElement.className = 'revoked-status denied';
+                statusElement.textContent = 'Denied';
+                statusElement.style.background = '#f5c6cb';
+                statusElement.style.color = '#721c24';
+                
+                // Update action buttons
+                const actionsDiv = card.querySelector('.permission-actions');
+                actionsDiv.innerHTML = `
+                    <button class="btn-review">Review Decision</button>
+                    <button class="btn-allow">Allow Request</button>
                 `;
             }
             break;
