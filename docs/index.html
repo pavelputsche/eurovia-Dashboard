@@ -873,6 +873,229 @@
                 <h2>Settings</h2>
                 <p>Settings content will be displayed here.</p>
             </div>
+
+            <div class="page-content" id="requestAccessContent" style="display: none;">
+                <div class="page-header">
+                    <h2>Request Access</h2>
+                    <p>Browse available institutions and request access to their services</p>
+                </div>
+
+                <div class="institutions-grid">
+                    <!-- PaymentApp Pro -->
+                    <div class="institution-card">
+                        <div class="institution-header">
+                            <div class="institution-logo paymentapp">PAY</div>
+                            <div class="institution-info">
+                                <h3>PaymentApp Pro</h3>
+                                <div class="institution-status">
+                                    <i class="fas fa-check-circle verified"></i>
+                                    <span>Verified Financial Service</span>
+                                </div>
+                            </div>
+                            <button class="btn-request" onclick="requestAccess('paymentapp')">
+                                <i class="fas fa-plus"></i>
+                                Request Access
+                            </button>
+                        </div>
+                        
+                        <div class="permissions-granted">
+                            <h4>Current Permissions:</h4>
+                            <div class="permission-list">
+                                <div class="permission-item granted">
+                                    <i class="fas fa-credit-card"></i>
+                                    <span>Payment Processing</span>
+                                    <div class="permission-status">Active</div>
+                                </div>
+                                <div class="permission-item granted">
+                                    <i class="fas fa-history"></i>
+                                    <span>Transaction History</span>
+                                    <div class="permission-status">Active</div>
+                                </div>
+                                <div class="permission-item granted">
+                                    <i class="fas fa-chart-line"></i>
+                                    <span>Spending Analytics</span>
+                                    <div class="permission-status">Active</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BudgetTracker -->
+                    <div class="institution-card">
+                        <div class="institution-header">
+                            <div class="institution-logo budgettracker">BUD</div>
+                            <div class="institution-info">
+                                <h3>BudgetTracker</h3>
+                                <div class="institution-status">
+                                    <i class="fas fa-check-circle verified"></i>
+                                    <span>Verified Budget Management</span>
+                                </div>
+                            </div>
+                            <button class="btn-request" onclick="requestAccess('budgettracker')">
+                                <i class="fas fa-plus"></i>
+                                Request Access
+                            </button>
+                        </div>
+                        
+                        <div class="permissions-granted">
+                            <h4>Current Permissions:</h4>
+                            <div class="permission-list">
+                                <div class="permission-item granted">
+                                    <i class="fas fa-wallet"></i>
+                                    <span>Account Balance</span>
+                                    <div class="permission-status">Active</div>
+                                </div>
+                                <div class="permission-item granted">
+                                    <i class="fas fa-chart-pie"></i>
+                                    <span>Spending Categories</span>
+                                    <div class="permission-status">Active</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ExpenseManager -->
+                    <div class="institution-card">
+                        <div class="institution-header">
+                            <div class="institution-logo expensemanager">EXP</div>
+                            <div class="institution-info">
+                                <h3>ExpenseManager</h3>
+                                <div class="institution-status">
+                                    <i class="fas fa-check-circle verified"></i>
+                                    <span>Verified Expense Tracking</span>
+                                </div>
+                            </div>
+                            <button class="btn-request" onclick="requestAccess('expensemanager')">
+                                <i class="fas fa-plus"></i>
+                                Request Access
+                            </button>
+                        </div>
+                        
+                        <div class="permissions-granted">
+                            <h4>Current Permissions:</h4>
+                            <div class="permission-list">
+                                <div class="permission-item granted">
+                                    <i class="fas fa-receipt"></i>
+                                    <span>Transaction Data</span>
+                                    <div class="permission-status">Active</div>
+                                </div>
+                                <div class="permission-item pending">
+                                    <i class="fas fa-camera"></i>
+                                    <span>Receipt Scanning</span>
+                                    <div class="permission-status">Pending</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- InvestmentTracker -->
+                    <div class="institution-card">
+                        <div class="institution-header">
+                            <div class="institution-logo investmenttracker">INV</div>
+                            <div class="institution-info">
+                                <h3>InvestmentTracker</h3>
+                                <div class="institution-status">
+                                    <i class="fas fa-check-circle verified"></i>
+                                    <span>Verified Investment Platform</span>
+                                </div>
+                            </div>
+                            <button class="btn-request" onclick="requestAccess('investmenttracker')">
+                                <i class="fas fa-plus"></i>
+                                Request Access
+                            </button>
+                        </div>
+                        
+                        <div class="permissions-granted">
+                            <h4>Current Permissions:</h4>
+                            <div class="permission-list">
+                                <div class="permission-item granted">
+                                    <i class="fas fa-chart-area"></i>
+                                    <span>Portfolio Overview</span>
+                                    <div class="permission-status">Active</div>
+                                </div>
+                                <div class="permission-item granted">
+                                    <i class="fas fa-coins"></i>
+                                    <span>Investment Holdings</span>
+                                    <div class="permission-status">Active</div>
+                                </div>
+                                <div class="permission-item granted">
+                                    <i class="fas fa-trophy"></i>
+                                    <span>Performance Metrics</span>
+                                    <div class="permission-status">Active</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TaxHelper -->
+                    <div class="institution-card">
+                        <div class="institution-header">
+                            <div class="institution-logo taxhelper">TAX</div>
+                            <div class="institution-info">
+                                <h3>TaxHelper</h3>
+                                <div class="institution-status">
+                                    <i class="fas fa-check-circle verified"></i>
+                                    <span>Verified Tax Service</span>
+                                </div>
+                            </div>
+                            <button class="btn-request" onclick="requestAccess('taxhelper')">
+                                <i class="fas fa-plus"></i>
+                                Request Access
+                            </button>
+                        </div>
+                        
+                        <div class="permissions-granted">
+                            <h4>Current Permissions:</h4>
+                            <div class="permission-list">
+                                <div class="permission-item denied">
+                                    <i class="fas fa-file-invoice-dollar"></i>
+                                    <span>Tax Document Access</span>
+                                    <div class="permission-status">Denied</div>
+                                </div>
+                                <div class="permission-item available">
+                                    <i class="fas fa-calculator"></i>
+                                    <span>Tax Calculation</span>
+                                    <div class="permission-status">Available</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CreditMonitor -->
+                    <div class="institution-card">
+                        <div class="institution-header">
+                            <div class="institution-logo creditmonitor">CRE</div>
+                            <div class="institution-info">
+                                <h3>CreditMonitor</h3>
+                                <div class="institution-status">
+                                    <i class="fas fa-check-circle verified"></i>
+                                    <span>Verified Credit Service</span>
+                                </div>
+                            </div>
+                            <button class="btn-request" onclick="requestAccess('creditmonitor')">
+                                <i class="fas fa-plus"></i>
+                                Request Access
+                            </button>
+                        </div>
+                        
+                        <div class="permissions-granted">
+                            <h4>Current Permissions:</h4>
+                            <div class="permission-list">
+                                <div class="permission-item granted">
+                                    <i class="fas fa-credit-card"></i>
+                                    <span>Credit Score Monitoring</span>
+                                    <div class="permission-status">Active</div>
+                                </div>
+                                <div class="permission-item available">
+                                    <i class="fas fa-bell"></i>
+                                    <span>Alert Notifications</span>
+                                    <div class="permission-status">Available</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 

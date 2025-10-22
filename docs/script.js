@@ -94,7 +94,22 @@ quickActionBtns.forEach(btn => {
 function handleQuickAction(action) {
     const actions = {
         'request-access': () => {
-            showNotification('Request Access form would open here', 'info');
+            // Navigate to Request Access page
+            console.log('Request Access clicked');
+            pageTitle.textContent = 'Request Access';
+            dashboardContent.style.display = 'none';
+            pageContents.forEach(content => content.style.display = 'none');
+            
+            const requestAccessContent = document.getElementById('requestAccessContent');
+            console.log('Found requestAccessContent:', !!requestAccessContent);
+            if (requestAccessContent) {
+                requestAccessContent.style.display = 'block';
+                console.log('Set requestAccessContent display to block');
+            }
+            
+            // Update active nav item
+            navItems.forEach(nav => nav.classList.remove('active'));
+            showNotification('Browse available institutions and request access', 'info');
         },
         'renew-permissions': () => {
             showNotification('Renewing permissions...', 'success');
@@ -826,6 +841,29 @@ window.onclick = function(event) {
     const modal = document.getElementById('infoModal');
     if (event.target === modal) {
         closeModal();
+    }
+}
+
+// Request Access functionality
+function requestAccess(institutionId) {
+    const institutions = {
+        'paymentapp': 'PaymentApp Pro',
+        'budgettracker': 'BudgetTracker',
+        'expensemanager': 'ExpenseManager',
+        'investmenttracker': 'InvestmentTracker',
+        'taxhelper': 'TaxHelper',
+        'creditmonitor': 'CreditMonitor'
+    };
+    
+    const institutionName = institutions[institutionId];
+    
+    if (confirm(`Do you want to request additional permissions from ${institutionName}?`)) {
+        showNotification(`Access request sent to ${institutionName}`, 'success');
+        
+        // Simulate updating the UI after a delay
+        setTimeout(() => {
+            showNotification(`${institutionName} will review your request within 24 hours`, 'info');
+        }, 2000);
     }
 }
 

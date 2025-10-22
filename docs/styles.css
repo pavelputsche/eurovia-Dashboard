@@ -1616,3 +1616,241 @@ body {
     from { transform: translateY(-50px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
 }
+
+/* Request Access Page Styles */
+#requestAccessContent {
+    display: block !important;
+    padding: 20px;
+    background: #f8f9fa;
+    min-height: 100vh;
+}
+
+#requestAccessContent .page-header {
+    margin-bottom: 30px;
+}
+
+#requestAccessContent .page-header h2 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+#requestAccessContent .page-header p {
+    color: #6c757d;
+    font-size: 1.1rem;
+}
+
+.institutions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 25px;
+    margin-top: 25px;
+}
+
+.institution-card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.institution-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.institution-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.institution-logo {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.institution-logo.paymentapp {
+    background: linear-gradient(135deg, #28a745, #20c997);
+}
+
+.institution-logo.budgettracker {
+    background: linear-gradient(135deg, #17a2b8, #6f42c1);
+}
+
+.institution-logo.expensemanager {
+    background: linear-gradient(135deg, #ffc107, #fd7e14);
+}
+
+.institution-logo.investmenttracker {
+    background: linear-gradient(135deg, #dc3545, #e83e8c);
+}
+
+.institution-logo.taxhelper {
+    background: linear-gradient(135deg, #6c757d, #495057);
+}
+
+.institution-logo.creditmonitor {
+    background: linear-gradient(135deg, #007bff, #6610f2);
+}
+
+.institution-info {
+    flex: 1;
+    min-width: 200px;
+}
+
+.institution-info h3 {
+    margin: 0 0 8px 0;
+    color: #2c3e50;
+    font-size: 1.3rem;
+}
+
+.institution-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.institution-status .verified {
+    color: #28a745;
+}
+
+.btn-request {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.btn-request:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.permissions-granted {
+    border-top: 1px solid #e9ecef;
+    padding-top: 20px;
+}
+
+.permissions-granted h4 {
+    margin: 0 0 15px 0;
+    color: #495057;
+    font-size: 1.1rem;
+}
+
+.permission-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.permission-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border-left: 4px solid;
+}
+
+.permission-item.granted {
+    background: #d4edda;
+    border-left-color: #28a745;
+}
+
+.permission-item.pending {
+    background: #fff3cd;
+    border-left-color: #ffc107;
+}
+
+.permission-item.denied {
+    background: #f8d7da;
+    border-left-color: #dc3545;
+}
+
+.permission-item.available {
+    background: #d1ecf1;
+    border-left-color: #17a2b8;
+}
+
+.permission-item i {
+    color: #495057;
+    width: 20px;
+    text-align: center;
+}
+
+.permission-item span {
+    flex: 1;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.permission-status {
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.permission-item.granted .permission-status {
+    background: #28a745;
+    color: white;
+}
+
+.permission-item.pending .permission-status {
+    background: #ffc107;
+    color: #212529;
+}
+
+.permission-item.denied .permission-status {
+    background: #dc3545;
+    color: white;
+}
+
+.permission-item.available .permission-status {
+    background: #17a2b8;
+    color: white;
+}
+
+/* Responsive Design for Institution Cards */
+@media (max-width: 768px) {
+    .institutions-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .institution-header {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+    
+    .institution-info {
+        min-width: auto;
+    }
+    
+    .btn-request {
+        justify-content: center;
+    }
+}
