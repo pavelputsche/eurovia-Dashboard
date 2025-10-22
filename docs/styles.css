@@ -634,6 +634,295 @@ body {
     }
 }
 
+/* Permissions Page Styles */
+.permissions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e1e8ed;
+}
+
+.permissions-summary {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.total-permissions {
+    background: #667eea;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.expiring-soon {
+    background: #ffc107;
+    color: #856404;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.permissions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 20px;
+}
+
+/* Permission Card Styles */
+.permission-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid #e1e8ed;
+}
+
+.permission-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.permission-card.active {
+    border-left: 4px solid #28a745;
+}
+
+.permission-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.institution-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.institution-logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1rem;
+    color: white;
+}
+
+.institution-logo.drv {
+    background: #0056b3;
+}
+
+.institution-logo.payment {
+    background: #28a745;
+}
+
+.institution-logo.budget {
+    background: #6f42c1;
+}
+
+.institution-logo.invest {
+    background: #fd7e14;
+}
+
+.institution-logo.tax {
+    background: #dc3545;
+}
+
+.institution-logo.insurance {
+    background: #20c997;
+}
+
+.institution-details h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.verification-badge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #28a745;
+    font-size: 0.85rem;
+    margin-top: 3px;
+}
+
+.verification-badge i {
+    font-size: 0.9rem;
+}
+
+.permission-status {
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.permission-status.active {
+    background: #d4edda;
+    color: #155724;
+}
+
+.permission-status.expiring {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.menu-btn {
+    background: none;
+    border: none;
+    color: #6c757d;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    transition: background 0.3s ease;
+}
+
+.menu-btn:hover {
+    background: #e9ecef;
+}
+
+.permission-details {
+    padding: 20px;
+}
+
+.permission-type {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.permission-type i {
+    color: #667eea;
+    font-size: 1.1rem;
+    width: 20px;
+}
+
+.permission-type span {
+    font-size: 1rem;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.permission-duration {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-left: 30px;
+}
+
+.permission-actions {
+    display: flex;
+    gap: 10px;
+    padding: 0 20px 20px;
+}
+
+.permission-actions button {
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.btn-approve {
+    background: #28a745;
+    color: white;
+}
+
+.btn-approve:hover {
+    background: #218838;
+    transform: translateY(-1px);
+}
+
+.btn-decline {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-decline:hover {
+    background: #c82333;
+    transform: translateY(-1px);
+}
+
+.btn-manage {
+    background: #667eea;
+    color: white;
+}
+
+.btn-manage:hover {
+    background: #5a6fd8;
+    transform: translateY(-1px);
+}
+
+.btn-revoke {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-revoke:hover {
+    background: #5a6268;
+    transform: translateY(-1px);
+}
+
+.btn-renew {
+    background: #ffc107;
+    color: #856404;
+}
+
+.btn-renew:hover {
+    background: #e0a800;
+    transform: translateY(-1px);
+}
+
+/* Responsive adjustments for permissions */
+@media (max-width: 768px) {
+    .permissions-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .permissions-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+    
+    .permissions-summary {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .permission-actions {
+        flex-direction: column;
+    }
+    
+    .institution-info {
+        gap: 10px;
+    }
+    
+    .institution-logo {
+        width: 40px;
+        height: 40px;
+        font-size: 0.9rem;
+    }
+}
+
 /* Loading Animation */
 @keyframes fadeIn {
     from {
@@ -647,6 +936,10 @@ body {
 }
 
 .tile {
+    animation: fadeIn 0.6s ease-out;
+}
+
+.permission-card {
     animation: fadeIn 0.6s ease-out;
 }
 

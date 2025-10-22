@@ -295,8 +295,215 @@
 
             <!-- Other Page Contents (Hidden by default) -->
             <div class="page-content" id="permissionsContent" style="display: none;">
-                <h2>My Permissions</h2>
-                <p>Permission management content will be displayed here.</p>
+                <div class="permissions-header">
+                    <h2>My Permissions</h2>
+                    <div class="permissions-summary">
+                        <span class="total-permissions">12 Active Permissions</span>
+                        <span class="expiring-soon">3 Expiring Soon</span>
+                    </div>
+                </div>
+
+                <div class="permissions-grid">
+                    <!-- Deutsche Rentenversicherung -->
+                    <div class="permission-card">
+                        <div class="permission-header">
+                            <div class="institution-info">
+                                <div class="institution-logo drv">DRV</div>
+                                <div class="institution-details">
+                                    <h3>Deutsche Rentenversicherung</h3>
+                                    <div class="verification-badge">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Verified</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="permission-menu">
+                                <button class="menu-btn">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-details">
+                            <div class="permission-type">
+                                <i class="fas fa-chart-line"></i>
+                                <span>Möchte Ihr Depot einsehen</span>
+                            </div>
+                            <div class="permission-duration">
+                                <span>14.10.2025 - 14.10.2026</span>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-actions">
+                            <button class="btn-approve">Zugriff gewähren</button>
+                            <button class="btn-decline">Ablehnen</button>
+                        </div>
+                    </div>
+
+                    <!-- PaymentApp Pro -->
+                    <div class="permission-card active">
+                        <div class="permission-header">
+                            <div class="institution-info">
+                                <div class="institution-logo payment">PAY</div>
+                                <div class="institution-details">
+                                    <h3>PaymentApp Pro</h3>
+                                    <div class="verification-badge">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Verified</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="permission-status active">Active</div>
+                        </div>
+                        
+                        <div class="permission-details">
+                            <div class="permission-type">
+                                <i class="fas fa-credit-card"></i>
+                                <span>Transaction History & Balance</span>
+                            </div>
+                            <div class="permission-duration">
+                                <span>01.08.2025 - 01.08.2026</span>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-actions">
+                            <button class="btn-manage">Manage Access</button>
+                            <button class="btn-revoke">Revoke</button>
+                        </div>
+                    </div>
+
+                    <!-- BudgetTracker -->
+                    <div class="permission-card active">
+                        <div class="permission-header">
+                            <div class="institution-info">
+                                <div class="institution-logo budget">BT</div>
+                                <div class="institution-details">
+                                    <h3>BudgetTracker</h3>
+                                    <div class="verification-badge">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Verified</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="permission-status expiring">Expiring Soon</div>
+                        </div>
+                        
+                        <div class="permission-details">
+                            <div class="permission-type">
+                                <i class="fas fa-chart-pie"></i>
+                                <span>Account Balance & Categories</span>
+                            </div>
+                            <div class="permission-duration">
+                                <span>15.06.2025 - 25.10.2025</span>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-actions">
+                            <button class="btn-renew">Renew Access</button>
+                            <button class="btn-revoke">Revoke</button>
+                        </div>
+                    </div>
+
+                    <!-- Investment Advisor -->
+                    <div class="permission-card">
+                        <div class="permission-header">
+                            <div class="institution-info">
+                                <div class="institution-logo invest">INV</div>
+                                <div class="institution-details">
+                                    <h3>Investment Advisor Pro</h3>
+                                    <div class="verification-badge">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Verified</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="permission-menu">
+                                <button class="menu-btn">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-details">
+                            <div class="permission-type">
+                                <i class="fas fa-chart-area"></i>
+                                <span>Portfolio Overview & Performance</span>
+                            </div>
+                            <div class="permission-duration">
+                                <span>20.09.2025 - 20.09.2026</span>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-actions">
+                            <button class="btn-approve">Grant Access</button>
+                            <button class="btn-decline">Decline</button>
+                        </div>
+                    </div>
+
+                    <!-- Tax Service -->
+                    <div class="permission-card active">
+                        <div class="permission-header">
+                            <div class="institution-info">
+                                <div class="institution-logo tax">TAX</div>
+                                <div class="institution-details">
+                                    <h3>TaxService Digital</h3>
+                                    <div class="verification-badge">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Verified</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="permission-status active">Active</div>
+                        </div>
+                        
+                        <div class="permission-details">
+                            <div class="permission-type">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                                <span>Annual Statements & Tax Documents</span>
+                            </div>
+                            <div class="permission-duration">
+                                <span>01.01.2025 - 31.12.2025</span>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-actions">
+                            <button class="btn-manage">Manage Access</button>
+                            <button class="btn-revoke">Revoke</button>
+                        </div>
+                    </div>
+
+                    <!-- Insurance Portal -->
+                    <div class="permission-card active">
+                        <div class="permission-header">
+                            <div class="institution-info">
+                                <div class="institution-logo insurance">INS</div>
+                                <div class="institution-details">
+                                    <h3>Insurance Portal</h3>
+                                    <div class="verification-badge">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Verified</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="permission-status expiring">Expiring Soon</div>
+                        </div>
+                        
+                        <div class="permission-details">
+                            <div class="permission-type">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Policy Information & Claims</span>
+                            </div>
+                            <div class="permission-duration">
+                                <span>10.05.2025 - 28.10.2025</span>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-actions">
+                            <button class="btn-renew">Renew Access</button>
+                            <button class="btn-revoke">Revoke</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="page-content" id="requestsContent" style="display: none;">

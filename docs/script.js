@@ -302,7 +302,203 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 150);
         });
     });
+    
+    // Initialize permission cards functionality
+    initializePermissionCards();
 });
+
+// Permission Cards Functionality
+function initializePermissionCards() {
+    // Handle permission action buttons
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('btn-approve')) {
+            handlePermissionAction('approve', e.target);
+        } else if (e.target.classList.contains('btn-decline')) {
+            handlePermissionAction('decline', e.target);
+        } else if (e.target.classList.contains('btn-manage')) {
+            handlePermissionAction('manage', e.target);
+        } else if (e.target.classList.contains('btn-revoke')) {
+            handlePermissionAction('revoke', e.target);
+        } else if (e.target.classList.contains('btn-renew')) {
+            handlePermissionAction('renew', e.target);
+        } else if (e.target.classList.contains('menu-btn')) {
+            handleMenuClick(e.target);
+        }
+    });
+    
+    // Add animation to permission cards
+    const permissionCards = document.querySelectorAll('.permission-card');
+    permissionCards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 100);
+    });
+}
+
+function handlePermissionAction(action, button) {
+    const card = button.closest('.permission-card');
+    const institutionName = card.querySelector('.institution-details h3').textContent;
+    
+    switch (action) {
+        case 'approve':
+            if (confirm(`Grant access to ${institutionName}?`)) {
+                showNotification(`Access granted to ${institutionName}`, 'success');
+                // Update card to active state
+                card.classList.add('active');
+                const header = card.querySelector('.permission-header');
+                const actionsDiv = card.querySelector('.permission-actions');
+                
+                // Replace menu button with status
+                const menuDiv = header.querySelector('.permission-menu');
+                if (menuDiv) {
+                    menuDiv.innerHTML = '<div class="permission-status active">Active</div>';
+                }
+                
+                // Update action buttons
+                actionsDiv.innerHTML = `
+                    <button class="btn-manage">Manage Access</button>
+                    <button class="btn-revoke">Revoke</button>
+                `;
+            }
+            break;
+            
+        case 'decline':
+            if (confirm(`Decline access request from ${institutionName}?`)) {
+                showNotification(`Access request declined for ${institutionName}`, 'warning');
+                // Remove the card with animation
+                card.style.transform = 'translateX(-100%)';
+                card.style.opacity = '0';
+                setTimeout(() => {
+                    card.remove();
+                }, 300);
+            }
+            break;
+            
+        case 'manage':
+            showNotification(`Opening permission management for ${institutionName}`, 'info');
+            break;
+            
+        case 'revoke':
+            if (confirm(`Are you sure you want to revoke access for ${institutionName}? This action cannot be undone.`)) {
+                showNotification(`Access revoked for ${institutionName}`, 'warning');
+                // Remove active class and update UI
+                card.classList.remove('active');
+                card.style.transform = 'translateX(-100%)';
+                card.style.opacity = '0';
+                setTimeout(() => {
+                    card.remove();
+                }, 300);
+            }
+            break;
+            
+        case 'renew':
+            if (confirm(`Renew access for ${institutionName} for another year?`)) {
+                showNotification(`Access renewed for ${institutionName}`, 'success');
+                // Update status and duration
+                const statusElement = card.querySelector('.permission-status');
+                if (statusElement) {
+                    statusElement.className = 'permission-status active';
+                    statusElement.textContent = 'Active';
+                }
+                
+                // Update duration (add one year)
+                const durationElement = card.querySelector('.permission-duration span');
+                if (durationElement) {
+                    const currentDate = new Date();
+                    const nextYear = new Date(currentDate.getFullYear() + 1, currentDate.getMonth(), currentDate.getDate());
+                    const formattedDate = nextYear.toLocaleDateString('de-DE');
+                    durationElement.textContent = `${new Date().toLocaleDateString('de-DE')} - ${formattedDate}`;
+                }
+                
+                // Update action buttons
+                const actionsDiv = card.querySelector('.permission-actions');
+                actionsDiv.innerHTML = `
+                    <button class="btn-manage">Manage Access</button>
+                    <button class="btn-revoke">Revoke</button>
+                `;
+            }
+            break;
+    }
+}
+
+function handleMenuClick(button) {
+    // Create a simple dropdown menu
+    const existingMenu = document.querySelector('.permission-dropdown');
+    if (existingMenu) {
+        existingMenu.remove();
+        return;
+    }
+    
+    const dropdown = document.createElement('div');
+    dropdown.className = 'permission-dropdown';
+    dropdown.innerHTML = `
+        <div class="dropdown-item" data-action="details">View Details</div>
+        <div class="dropdown-item" data-action="history">View History</div>
+        <div class="dropdown-item" data-action="notifications">Notification Settings</div>
+    `;
+    
+    // Position dropdown
+    const rect = button.getBoundingClientRect();
+    dropdown.style.position = 'fixed';
+    dropdown.style.top = `${rect.bottom + 5}px`;
+    dropdown.style.right = `${window.innerWidth - rect.right}px`;
+    dropdown.style.zIndex = '1000';
+    dropdown.style.background = 'white';
+    dropdown.style.border = '1px solid #e9ecef';
+    dropdown.style.borderRadius = '8px';
+    dropdown.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+    dropdown.style.minWidth = '150px';
+    
+    document.body.appendChild(dropdown);
+    
+    // Handle dropdown clicks
+    dropdown.addEventListener('click', (e) => {
+        const action = e.target.getAttribute('data-action');
+        if (action) {
+            showNotification(`${e.target.textContent} feature would open here`, 'info');
+            dropdown.remove();
+        }
+    });
+    
+    // Close dropdown when clicking outside
+    setTimeout(() => {
+        document.addEventListener('click', (e) => {
+            if (!dropdown.contains(e.target) && e.target !== button) {
+                dropdown.remove();
+            }
+        }, { once: true });
+    }, 10);
+}
+
+// Add dropdown styles
+const dropdownStyles = document.createElement('style');
+dropdownStyles.textContent = `
+    .permission-dropdown {
+        animation: fadeIn 0.2s ease;
+    }
+    
+    .dropdown-item {
+        padding: 10px 15px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        color: #333;
+        border-bottom: 1px solid #f1f3f4;
+    }
+    
+    .dropdown-item:last-child {
+        border-bottom: none;
+    }
+    
+    .dropdown-item:hover {
+        background: #f8f9fa;
+    }
+`;
+document.head.appendChild(dropdownStyles);
 
 // Handle window resize
 window.addEventListener('resize', () => {
