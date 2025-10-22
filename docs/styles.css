@@ -1627,6 +1627,10 @@ body {
 
 #requestAccessContent.show {
     display: block !important;
+    min-height: 100vh !important;
+    height: auto !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 #requestAccessContent .page-header {

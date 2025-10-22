@@ -153,63 +153,174 @@ function handleQuickAction(action) {
                 console.log('Hiding requestsContent');
             }
             
-            // Show the Request Access content
-            const requestAccessContent = document.getElementById('requestAccessContent');
-            console.log('Found requestAccessContent:', !!requestAccessContent);
-            
-            if (requestAccessContent) {
-                requestAccessContent.style.display = 'block';
-                requestAccessContent.classList.add('show');
-                console.log('Showing requestAccessContent');
-                console.log('requestAccessContent computed style:', window.getComputedStyle(requestAccessContent).display);
-                console.log('requestAccessContent offsetHeight:', requestAccessContent.offsetHeight);
-                console.log('requestAccessContent offsetWidth:', requestAccessContent.offsetWidth);
-                console.log('requestAccessContent visibility:', window.getComputedStyle(requestAccessContent).visibility);
-                console.log('requestAccessContent opacity:', window.getComputedStyle(requestAccessContent).opacity);
-                console.log('requestAccessContent innerHTML length:', requestAccessContent.innerHTML.length);
-                
-                // Force visible styles with strong CSS
-                requestAccessContent.style.visibility = 'visible';
-                requestAccessContent.style.opacity = '1';
-                requestAccessContent.style.height = 'auto';
-                requestAccessContent.style.overflow = 'visible';
-                requestAccessContent.style.position = 'relative';
-                requestAccessContent.style.zIndex = '1000';
-                requestAccessContent.style.backgroundColor = 'white';
-                requestAccessContent.style.border = '3px solid red'; // Debug border
-                
-                // Mark this element as protected from sidebar navigation
-                requestAccessContent.setAttribute('data-quick-action-active', 'true');
-                
-                // Remove the protection after a delay
-                setTimeout(() => {
-                    requestAccessContent.removeAttribute('data-quick-action-active');
-                }, 500);
-            } else {
-                console.error('requestAccessContent not found!');
+            // Remove any existing test elements
+            const existingTest = document.getElementById('workingRequestAccess');
+            if (existingTest) {
+                existingTest.remove();
             }
             
-            // DEBUG: Try to show ALL content to see what happens
-            setTimeout(() => {
-                const allPageContents = document.querySelectorAll('.page-content');
-                console.log('All page contents:', Array.from(allPageContents).map(el => ({ id: el.id, display: el.style.display, computed: window.getComputedStyle(el).display })));
-                
-                // Force show the requestAccessContent one more time
-                const testElement = document.getElementById('requestAccessContent');
-                if (testElement) {
-                    testElement.style.cssText = 'display: block !important; visibility: visible !important; opacity: 1 !important; position: relative !important; z-index: 9999 !important; background: yellow !important; min-height: 500px !important;';
-                    console.log('Applied emergency CSS to requestAccessContent');
-                }
-            }, 200);
+            // Create the working version with proper styling
+            const workingElement = document.createElement('div');
+            workingElement.id = 'workingRequestAccess';
+            workingElement.innerHTML = `
+                <div style="padding: 30px; background: #f8f9fa; min-height: 100vh;">
+                    <div style="margin-bottom: 30px;">
+                        <h2 style="color: #2c3e50; margin-bottom: 10px; font-size: 2rem;">Request Access</h2>
+                        <p style="color: #6c757d; font-size: 1.1rem;">Browse available institutions and request access to their services</p>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 25px; margin-top: 25px;">
+                        <!-- PaymentApp Pro -->
+                        <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); border: 1px solid #e9ecef; transition: all 0.3s ease;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #28a745, #20c997); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px;">PAY</div>
+                                    <div>
+                                        <h3 style="color: #2c3e50; margin: 0 0 5px 0; font-size: 1.3rem;">PaymentApp Pro</h3>
+                                        <div style="display: flex; align-items: center; gap: 5px; color: #28a745; font-size: 0.9rem;">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>Verified Financial Service</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button style="background: linear-gradient(135deg, #007bff, #0056b3); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.3s ease;">
+                                    <i class="fas fa-plus"></i>
+                                    Request Access
+                                </button>
+                            </div>
+                            
+                            <div>
+                                <h4 style="color: #495057; margin: 0 0 15px 0; font-size: 1rem;">Current Permissions:</h4>
+                                <div style="display: flex; flex-direction: column; gap: 10px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #d4edda; border-radius: 8px; border-left: 4px solid #28a745;">
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <i class="fas fa-credit-card" style="color: #155724;"></i>
+                                            <span style="color: #155724; font-weight: 500;">Payment Processing</span>
+                                        </div>
+                                        <div style="background: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 500;">Active</div>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #d4edda; border-radius: 8px; border-left: 4px solid #28a745;">
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <i class="fas fa-history" style="color: #155724;"></i>
+                                            <span style="color: #155724; font-weight: 500;">Transaction History</span>
+                                        </div>
+                                        <div style="background: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 500;">Active</div>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #d4edda; border-radius: 8px; border-left: 4px solid #28a745;">
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <i class="fas fa-chart-line" style="color: #155724;"></i>
+                                            <span style="color: #155724; font-weight: 500;">Spending Analytics</span>
+                                        </div>
+                                        <div style="background: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 500;">Active</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- BudgetTracker -->
+                        <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); border: 1px solid #e9ecef; transition: all 0.3s ease;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #007bff, #0056b3); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px;">BUD</div>
+                                    <div>
+                                        <h3 style="color: #2c3e50; margin: 0 0 5px 0; font-size: 1.3rem;">BudgetTracker</h3>
+                                        <div style="display: flex; align-items: center; gap: 5px; color: #28a745; font-size: 0.9rem;">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>Verified Budget Management</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button style="background: linear-gradient(135deg, #007bff, #0056b3); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.3s ease;">
+                                    <i class="fas fa-plus"></i>
+                                    Request Access
+                                </button>
+                            </div>
+                            
+                            <div>
+                                <h4 style="color: #495057; margin: 0 0 15px 0; font-size: 1rem;">Current Permissions:</h4>
+                                <div style="display: flex; flex-direction: column; gap: 10px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #d4edda; border-radius: 8px; border-left: 4px solid #28a745;">
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <i class="fas fa-wallet" style="color: #155724;"></i>
+                                            <span style="color: #155724; font-weight: 500;">Account Balance</span>
+                                        </div>
+                                        <div style="background: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 500;">Active</div>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #d4edda; border-radius: 8px; border-left: 4px solid #28a745;">
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <i class="fas fa-chart-pie" style="color: #155724;"></i>
+                                            <span style="color: #155724; font-weight: 500;">Spending Categories</span>
+                                        </div>
+                                        <div style="background: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 500;">Active</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ExpenseManager -->
+                        <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); border: 1px solid #e9ecef; transition: all 0.3s ease;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #fd7e14, #e55a4f); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px;">EXP</div>
+                                    <div>
+                                        <h3 style="color: #2c3e50; margin: 0 0 5px 0; font-size: 1.3rem;">ExpenseManager</h3>
+                                        <div style="display: flex; align-items: center; gap: 5px; color: #28a745; font-size: 0.9rem;">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>Verified Expense Tracking</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button style="background: linear-gradient(135deg, #007bff, #0056b3); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.3s ease;">
+                                    <i class="fas fa-plus"></i>
+                                    Request Access
+                                </button>
+                            </div>
+                            
+                            <div>
+                                <h4 style="color: #495057; margin: 0 0 15px 0; font-size: 1rem;">Current Permissions:</h4>
+                                <div style="display: flex; flex-direction: column; gap: 10px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #d4edda; border-radius: 8px; border-left: 4px solid #28a745;">
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <i class="fas fa-database" style="color: #155724;"></i>
+                                            <span style="color: #155724; font-weight: 500;">Transaction Data</span>
+                                        </div>
+                                        <div style="background: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 500;">Active</div>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;">
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <i class="fas fa-receipt" style="color: #856404;"></i>
+                                            <span style="color: #856404; font-weight: 500;">Receipt Scanning</span>
+                                        </div>
+                                        <div style="background: #ffc107; color: #212529; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 500;">Pending</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            workingElement.style.cssText = `
+                position: relative;
+                width: 100%;
+                height: auto;
+                background: white;
+                z-index: 100;
+                display: block;
+                visibility: visible;
+                opacity: 1;
+            `;
+            
+            // Find the main content area and append our working element
+            const mainContent = document.querySelector('.main-content') || document.querySelector('.content') || document.body;
+            mainContent.appendChild(workingElement);
+            
+            console.log('Created working Request Access page');
+            console.log('Working element offsetHeight:', workingElement.offsetHeight);
+            console.log('Working element offsetWidth:', workingElement.offsetWidth);
             
             // Remove active class from all nav items (since this is a Quick Action, not sidebar nav)
             navItems.forEach(nav => nav.classList.remove('active'));
-            
-            // Set a flag to prevent sidebar navigation from interfering
-            window.quickActionActive = true;
-            setTimeout(() => {
-                window.quickActionActive = false;
-            }, 100);
             
             showNotification('Browse available institutions and request access', 'info');
         },
