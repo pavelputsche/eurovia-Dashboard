@@ -25,12 +25,12 @@
             },
             setup() {
                 const stats = ref({
-                    myPermissions: 12,
-                    expiringSoon: 7,
-                    connectedApps: 8,
-                    avgDaysToRenew: 24,
+                    myPermissions: 27,
+                    expiringSoon: 21,
+                    connectedApps: 5,
+                    avgDaysToRenew: 22,
                     pendingRequests: 3,
-                    accessHealth: 94
+                    accessHealth: 93
                 });
 
                 const recentActivity = ref([
@@ -42,9 +42,9 @@
                 ]);
 
                 const alerts = ref([
-                    { type: 'warning', message: 'Urgent: 2 expiring tomorrow', icon: 'fas fa-exclamation-triangle' },
-                    { type: 'info', message: 'Review: 5 pending requests', icon: 'fas fa-inbox' },
-                    { type: 'info', message: 'Info: Security review due', icon: 'fas fa-shield-alt' }
+                    { type: 'urgent', message: 'Urgent: 2 expiring tomorrow', emoji: '⚠️' },
+                    { type: 'warning', message: 'Review: 5 pending requests', emoji: '📋' },
+                    { type: 'info', message: 'Info: Security review due', emoji: '🔒' }
                 ]);
 
                 const quickActions = ref([
@@ -84,127 +84,185 @@
             },
             template: `
                 <AppLayout page-title="Dashboard" current-page="dashboard" @quick-action="handleQuickAction">
-                    <!-- Overview & Account Summary -->
-                    <div class="overview-section">
-                        <div class="section-header">
-                            <h2>Overview & Account Summary</h2>
-                            <button class="btn-icon">
+                    <div class="dashboard-content">
+                        <!-- Top Tile - Full Width -->
+                        <div class="tile tile-full-width">
+                            <div class="tile-header">
+                                <h2>Overview & Account Summary</h2>
                                 <i class="fas fa-chart-line"></i>
-                            </button>
-                        </div>
+                            </div>
+                            <div class="tile-content">
+                                <div class="overview-grid">
+                                    <!-- Left Section - Permission Stats -->
+                                    <div class="permission-stats">
+                                        <div class="stat-card">
+                                            <div class="stat-number">{{ stats.myPermissions }}</div>
+                                            <div class="stat-label">My Permissions</div>
+                                            <div class="stat-sublabel">↗ 2 this month</div>
+                                        </div>
+                                        <div class="stat-card">
+                                            <div class="stat-number">{{ stats.expiringSoon }}</div>
+                                            <div class="stat-label">Expiring Soon</div>
+                                        </div>
+                                        <div class="stat-card">
+                                            <div class="stat-number">{{ stats.connectedApps }}</div>
+                                            <div class="stat-label">Connected Apps</div>
+                                            <div class="stat-sublabel">3 inactive</div>
+                                        </div>
+                                        <div class="stat-card">
+                                            <div class="stat-number">{{ stats.avgDaysToRenew }}</div>
+                                            <div class="stat-label">Avg Days to Renew</div>
+                                        </div>
+                                        <div class="stat-card">
+                                            <div class="stat-number">{{ stats.pendingRequests }}</div>
+                                            <div class="stat-label">Pending Requests</div>
+                                            <div class="stat-sublabel">Awaiting approval</div>
+                                        </div>
+                                        <div class="stat-card">
+                                            <div class="stat-number">{{ stats.accessHealth }}%</div>
+                                            <div class="stat-label">Access Health</div>
+                                        </div>
+                                        <div class="stat-card account-status">
+                                            <div class="status-label">Account Active</div>
+                                        </div>
+                                    </div>
 
-                        <div class="stats-grid">
-                            <div class="stat-card">
-                                <div class="stat-number">{{ stats.myPermissions }}</div>
-                                <div class="stat-label">My Permissions</div>
-                                <div class="stat-sublabel">2 this month</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-number">{{ stats.expiringSoon }}</div>
-                                <div class="stat-label">Expiring Soon</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-number">{{ stats.connectedApps }}</div>
-                                <div class="stat-label">Connected Apps</div>
-                                <div class="stat-sublabel">3 Inactive</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-number">{{ stats.avgDaysToRenew }}</div>
-                                <div class="stat-label">Avg Days to Renew</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-number">{{ stats.pendingRequests }}</div>
-                                <div class="stat-label">Pending Requests</div>
-                                <div class="stat-sublabel">Awaiting approval</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-number">{{ stats.accessHealth }}%</div>
-                                <div class="stat-label">Access Health</div>
-                            </div>
-                        </div>
+                                    <!-- Middle Section - Recent Activity -->
+                                    <div class="recent-activity">
+                                        <h4>Recent Activity</h4>
+                                        <div class="activity-list">
+                                            <div 
+                                                v-for="activity in recentActivity" 
+                                                :key="activity.action"
+                                                class="activity-item"
+                                            >
+                                                <span class="activity-text">{{ activity.action }}</span>
+                                                <span class="activity-time">{{ activity.time }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                        <div class="account-status">
-                            <div class="status-indicator active">Account Active</div>
-                        </div>
-                    </div>
-
-                    <!-- Activity and Alerts -->
-                    <div class="activity-alerts-grid">
-                        <!-- Recent Activity -->
-                        <div class="activity-section">
-                            <h3>Recent Activity</h3>
-                            <div class="activity-list">
-                                <div 
-                                    v-for="activity in recentActivity" 
-                                    :key="activity.action"
-                                    class="activity-item"
-                                >
-                                    <div class="activity-text">{{ activity.action }}</div>
-                                    <div class="activity-time">{{ activity.time }}</div>
+                                    <!-- Right Section - Alerts -->
+                                    <div class="alerts-section">
+                                        <h4>Alerts</h4>
+                                        <div class="alert-list">
+                                            <div 
+                                                v-for="alert in alerts" 
+                                                :key="alert.message"
+                                                class="alert-item"
+                                                :class="alert.type"
+                                            >
+                                                <div class="alert-icon">{{ alert.emoji }}</div>
+                                                <div class="alert-content">
+                                                    <div class="alert-title">{{ alert.message }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Alerts -->
-                        <div class="alerts-section">
-                            <h3>Alerts</h3>
-                            <div class="alerts-list">
-                                <div 
-                                    v-for="alert in alerts" 
-                                    :key="alert.message"
-                                    class="alert-item"
-                                    :class="alert.type"
-                                >
-                                    <i :class="alert.icon"></i>
-                                    <span>{{ alert.message }}</span>
+                        <!-- Bottom Row Tiles -->
+                        <div class="tiles-row">
+                            <!-- Sharing Permissions Tile -->
+                            <div class="tile">
+                                <div class="tile-header">
+                                    <h3>Sharing Permissions</h3>
+                                    <i class="fas fa-share-alt"></i>
+                                </div>
+                                <div class="tile-content">
+                                    <div class="permission-list">
+                                        <div class="permission-item">
+                                            <div class="permission-icon">
+                                                <i class="fas fa-chart-bar"></i>
+                                            </div>
+                                            <div class="permission-info">
+                                                <span class="permission-name">Account Balance</span>
+                                                <span class="permission-apps">3 apps</span>
+                                            </div>
+                                        </div>
+                                        <div class="permission-item">
+                                            <div class="permission-icon">
+                                                <i class="fas fa-exchange-alt"></i>
+                                            </div>
+                                            <div class="permission-info">
+                                                <span class="permission-name">Transaction History</span>
+                                                <span class="permission-apps">2 apps</span>
+                                            </div>
+                                        </div>
+                                        <div class="permission-item">
+                                            <div class="permission-icon">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <div class="permission-info">
+                                                <span class="permission-name">Profile Information</span>
+                                                <span class="permission-apps">5 apps</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <!-- Bottom sections grid -->
-                    <div class="bottom-sections-grid">
-                        <!-- Sharing Permissions -->
-                        <div class="section-card">
-                            <div class="section-header">
-                                <h3>Sharing Permissions</h3>
-                                <i class="fas fa-share-alt"></i>
-                            </div>
-                            <div class="section-content">
-                                <p>Manage how your data is shared</p>
-                            </div>
-                        </div>
-
-                        <!-- Quick Actions -->
-                        <div class="section-card">
-                            <div class="section-header">
-                                <h3>Quick Actions</h3>
-                                <i class="fas fa-bolt"></i>
-                            </div>
-                            <div class="section-content">
-                                <div class="quick-actions-grid">
-                                    <button 
-                                        v-for="action in quickActions"
-                                        :key="action.action"
-                                        class="action-btn"
-                                        :class="action.class"
-                                        @click="handleActionBtnClick(action.action)"
-                                    >
-                                        <i :class="action.icon"></i>
-                                        {{ action.title }}
-                                    </button>
+                            <!-- Quick Actions Tile -->
+                            <div class="tile">
+                                <div class="tile-header">
+                                    <h3>Quick Actions</h3>
+                                    <i class="fas fa-bolt"></i>
+                                </div>
+                                <div class="tile-content">
+                                    <div class="action-buttons">
+                                        <button 
+                                            v-for="action in quickActions"
+                                            :key="action.action"
+                                            class="action-btn"
+                                            :class="action.class"
+                                            @click="handleActionBtnClick(action.action)"
+                                        >
+                                            <i :class="action.icon"></i>
+                                            {{ action.title }}
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Third Parties -->
-                        <div class="section-card">
-                            <div class="section-header">
-                                <h3>Third Parties</h3>
-                                <i class="fas fa-users"></i>
-                            </div>
-                            <div class="section-content">
-                                <p>Connected third-party services</p>
+                            <!-- Third Parties Tile -->
+                            <div class="tile">
+                                <div class="tile-header">
+                                    <h3>Third Parties</h3>
+                                    <i class="fas fa-building"></i>
+                                </div>
+                                <div class="tile-content">
+                                    <div class="third-party-list">
+                                        <div class="third-party-item">
+                                            <div class="third-party-avatar">
+                                                <i class="fas fa-mobile-alt"></i>
+                                            </div>
+                                            <div class="third-party-info">
+                                                <span class="third-party-name">PaymentApp Pro</span>
+                                                <span class="third-party-status active">Active</span>
+                                            </div>
+                                        </div>
+                                        <div class="third-party-item">
+                                            <div class="third-party-avatar">
+                                                <i class="fas fa-chart-pie"></i>
+                                            </div>
+                                            <div class="third-party-info">
+                                                <span class="third-party-name">BudgetTracker</span>
+                                                <span class="third-party-status active">Active</span>
+                                            </div>
+                                        </div>
+                                        <div class="third-party-item">
+                                            <div class="third-party-avatar">
+                                                <i class="fas fa-credit-card"></i>
+                                            </div>
+                                            <div class="third-party-info">
+                                                <span class="third-party-name">ExpenseManager</span>
+                                                <span class="third-party-status pending">Pending</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

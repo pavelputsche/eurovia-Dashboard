@@ -142,27 +142,18 @@ export default {
   },
   template: `
     <div class="sidebar" :class="{ 'collapsed': sidebarCollapsed, 'mobile-open': mobileMenuOpen }">
-      <!-- Mobile header -->
-      <div class="mobile-header">
-        <div class="logo">
-          <i class="fas fa-university"></i>
-          <span>Eurovia</span>
-        </div>
-        <button class="mobile-menu-btn" @click="toggleMobileMenu">
-          <i class="fas fa-bars"></i>
-        </button>
-      </div>
+      
 
-      <!-- Sidebar toggle button -->
-      <button class="sidebar-toggle" @click="toggleSidebar">
-        <i class="fas fa-chevron-left" :class="{ 'rotated': sidebarCollapsed }"></i>
-      </button>
+               <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-university"></i>
+                    <span>Eurovia</span>
+                </div>
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
 
-      <!-- Logo -->
-      <div class="logo" v-show="!sidebarCollapsed">
-        <i class="fas fa-university"></i>
-        <span>Eurovia</span>
-      </div>
 
       <!-- Quick Actions -->
       <div class="sidebar-section">
