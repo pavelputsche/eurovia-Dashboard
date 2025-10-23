@@ -19,89 +19,34 @@
 
         const { createApp, ref, computed, onMounted } = Vue;
 
+        // Global function for onclick handlers
+        window.requestAccess = function(institutionId) {
+            const institutions = {
+                'paymentapp': 'PaymentApp Pro',
+                'budgettracker': 'BudgetTracker',
+                'expensemanager': 'ExpenseManager',
+                'investmenttracker': 'InvestmentTracker',
+                'taxhelper': 'TaxHelper',
+                'creditmonitor': 'CreditMonitor'
+            };
+            
+            const institutionName = institutions[institutionId];
+            
+            if (confirm(`Do you want to request additional permissions from ${institutionName}?`)) {
+                utils.showNotification(`Access request sent to ${institutionName}`, 'success');
+                
+                // Simulate updating the UI after a delay
+                setTimeout(() => {
+                    utils.showNotification(`${institutionName} will review your request within 24 hours`, 'info');
+                }, 2000);
+            }
+        };
+
         const RequestAccessApp = {
             components: {
                 AppLayout
             },
             setup() {
-                const institutions = ref(mockData.institutions);
-                const searchTerm = ref('');
-                const categoryFilter = ref('all');
-                const selectedInstitution = ref(null);
-                const selectedPermissions = ref([]);
-                const requestStatus = ref({});
-
-                const categories = ref([
-                    { value: 'all', label: 'All Categories' },
-                    { value: 'payment', label: 'Payment Services' },
-                    { value: 'finance', label: 'Financial Management' },
-                    { value: 'insurance', label: 'Insurance' },
-                    { value: 'investment', label: 'Investment' }
-                ]);
-
-                const filteredInstitutions = computed(() => {
-                    let filtered = institutions.value;
-
-                    if (searchTerm.value) {
-                        filtered = filtered.filter(inst => 
-                            inst.name.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
-                            inst.description.toLowerCase().includes(searchTerm.value.toLowerCase())
-                        );
-                    }
-
-                    return filtered;
-                });
-
-                const handleRequestAccess = (institutionId) => {
-                    const institution = institutions.value.find(inst => inst.id === institutionId);
-                    if (institution) {
-                        selectedInstitution.value = institution;
-                        selectedPermissions.value = [...institution.permissions];
-                    }
-                };
-
-                const handleSubmitRequest = () => {
-                    if (selectedInstitution.value && selectedPermissions.value.length > 0) {
-                        requestStatus.value[selectedInstitution.value.id] = 'requesting';
-                        
-                        setTimeout(() => {
-                            requestStatus.value[selectedInstitution.value.id] = 'submitted';
-                            utils.showNotification(
-                                `Access request for ${selectedInstitution.value.name} submitted successfully!`, 
-                                'success'
-                            );
-                            selectedInstitution.value = null;
-                            selectedPermissions.value = [];
-                        }, 1500);
-                    }
-                };
-
-                const handleCancelRequest = () => {
-                    selectedInstitution.value = null;
-                    selectedPermissions.value = [];
-                };
-
-                const togglePermission = (permission) => {
-                    const index = selectedPermissions.value.indexOf(permission);
-                    if (index > -1) {
-                        selectedPermissions.value.splice(index, 1);
-                    } else {
-                        selectedPermissions.value.push(permission);
-                    }
-                };
-
-                const getRequestButtonText = (institutionId) => {
-                    const status = requestStatus.value[institutionId];
-                    if (status === 'requesting') return 'Submitting...';
-                    if (status === 'submitted') return 'Request Submitted';
-                    return 'Request Access';
-                };
-
-                const isRequestButtonDisabled = (institutionId) => {
-                    const status = requestStatus.value[institutionId];
-                    return status === 'requesting' || status === 'submitted';
-                };
-
                 const handleQuickAction = (action) => {
                     switch(action) {
                         case 'renew-permissions':
@@ -113,171 +58,124 @@
                 };
 
                 return {
-                    institutions,
-                    searchTerm,
-                    categoryFilter,
-                    categories,
-                    filteredInstitutions,
-                    selectedInstitution,
-                    selectedPermissions,
-                    requestStatus,
-                    handleRequestAccess,
-                    handleSubmitRequest,
-                    handleCancelRequest,
-                    togglePermission,
-                    getRequestButtonText,
-                    isRequestButtonDisabled,
                     handleQuickAction,
                     utils
                 };
             },
             template: `
                 <AppLayout page-title="Request Access" current-page="request-access" @quick-action="handleQuickAction">
-                    <!-- Page Header -->
-                    <div class="request-header" v-if="!selectedInstitution">
-                        <div class="header-content">
-                            <h2>Browse Available Institutions</h2>
-                            <p>Request access to financial institutions and their services</p>
-                        </div>
-
-                        <div class="request-controls">
-                            <div class="search-box">
-                                <i class="fas fa-search"></i>
-                                <input 
-                                    type="text" 
-                                    placeholder="Search institutions..." 
-                                    v-model="searchTerm"
-                                >
-                            </div>
-                            <select v-model="categoryFilter" class="filter-select">
-                                <option 
-                                    v-for="category in categories" 
-                                    :key="category.value"
-                                    :value="category.value"
-                                >
-                                    {{ category.label }}
-                                </option>
-                            </select>
-                        </div>
+                    <div class="page-header">
+                        <h2>Request Access</h2>
+                        <p>Browse available institutions and request access to their services</p>
                     </div>
 
-                    <!-- Institution Grid -->
-                    <div v-if="!selectedInstitution" class="institutions-grid">
-                        <div 
-                            v-for="institution in filteredInstitutions" 
-                            :key="institution.id"
-                            class="institution-card"
-                        >
-                            <div class="card-header">
+                    <div class="institutions-grid">
+                        <!-- PaymentApp Pro -->
+                        <div class="institution-card">
+                            <div class="institution-header">
+                                <div class="institution-logo paymentapp">PAY</div>
                                 <div class="institution-info">
-                                    <div class="institution-icon" :style="{ background: institution.color }">
-                                        {{ institution.icon }}
-                                    </div>
-                                    <div class="institution-details">
-                                        <h3 class="institution-name">{{ institution.name }}</h3>
-                                        <div class="institution-verification" v-if="institution.verified">
-                                            <i class="fas fa-check-circle"></i>
-                                            <span>Verified Financial Service</span>
-                                        </div>
+                                    <h3>PaymentApp Pro</h3>
+                                    <div class="institution-status">
+                                        <i class="fas fa-check-circle verified"></i>
+                                        <span>Verified Financial Service</span>
                                     </div>
                                 </div>
-                                <button 
-                                    @click="handleRequestAccess(institution.id)"
-                                    class="btn-request"
-                                    :disabled="isRequestButtonDisabled(institution.id)"
-                                >
+                                <button class="btn-request" onclick="requestAccess('paymentapp')">
                                     <i class="fas fa-plus"></i>
-                                    {{ getRequestButtonText(institution.id) }}
+                                    Request Access
                                 </button>
                             </div>
-
-                            <div class="card-content">
-                                <p class="institution-description">{{ institution.description }}</p>
-                                
-                                <div class="permissions-preview">
-                                    <h4>Available Permissions:</h4>
-                                    <ul class="permissions-list">
-                                        <li v-for="permission in institution.permissions" :key="permission">
-                                            <i class="fas fa-check"></i>
-                                            {{ permission }}
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Permission Selection Modal -->
-                    <div v-if="selectedInstitution" class="permission-selection">
-                        <div class="selection-header">
-                            <button @click="handleCancelRequest" class="btn-back">
-                                <i class="fas fa-arrow-left"></i>
-                                Back to Institutions
-                            </button>
-                            <h2>Request Access to {{ selectedInstitution.name }}</h2>
-                            <p>Select the permissions you need for this application</p>
-                        </div>
-
-                        <div class="institution-summary">
-                            <div class="institution-info">
-                                <div class="institution-icon large" :style="{ background: selectedInstitution.color }">
-                                    {{ selectedInstitution.icon }}
-                                </div>
-                                <div class="institution-details">
-                                    <h3>{{ selectedInstitution.name }}</h3>
-                                    <p>{{ selectedInstitution.description }}</p>
-                                    <div class="verification-badge" v-if="selectedInstitution.verified">
-                                        <i class="fas fa-shield-alt"></i>
-                                        <span>Verified & Secure</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="permissions-selection">
-                            <h3>Select Permissions</h3>
-                            <p>Choose which permissions you want to grant to this application:</p>
                             
-                            <div class="permissions-grid">
-                                <div 
-                                    v-for="permission in selectedInstitution.permissions" 
-                                    :key="permission"
-                                    class="permission-option"
-                                    :class="{ 'selected': selectedPermissions.includes(permission) }"
-                                    @click="togglePermission(permission)"
-                                >
-                                    <div class="permission-checkbox">
-                                        <i class="fas fa-check" v-if="selectedPermissions.includes(permission)"></i>
+                            <div class="permissions-granted">
+                                <h4>Current Permissions:</h4>
+                                <div class="permission-list">
+                                    <div class="permission-item granted">
+                                        <i class="fas fa-credit-card"></i>
+                                        <span>Payment Processing</span>
+                                        <div class="permission-status">Active</div>
                                     </div>
-                                    <div class="permission-details">
-                                        <h4>{{ permission }}</h4>
-                                        <p>Allow access to {{ permission.toLowerCase() }}</p>
+                                    <div class="permission-item granted">
+                                        <i class="fas fa-history"></i>
+                                        <span>Transaction History</span>
+                                        <div class="permission-status">Active</div>
+                                    </div>
+                                    <div class="permission-item granted">
+                                        <i class="fas fa-chart-line"></i>
+                                        <span>Spending Analytics</span>
+                                        <div class="permission-status">Active</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="selection-actions">
-                            <button @click="handleCancelRequest" class="btn-cancel">
-                                <i class="fas fa-times"></i>
-                                Cancel
-                            </button>
-                            <button 
-                                @click="handleSubmitRequest" 
-                                class="btn-submit"
-                                :disabled="selectedPermissions.length === 0"
-                            >
-                                <i class="fas fa-paper-plane"></i>
-                                Submit Request ({{ selectedPermissions.length }} permissions)
-                            </button>
+                        <!-- BudgetTracker -->
+                        <div class="institution-card">
+                            <div class="institution-header">
+                                <div class="institution-logo budgettracker">BUD</div>
+                                <div class="institution-info">
+                                    <h3>BudgetTracker</h3>
+                                    <div class="institution-status">
+                                        <i class="fas fa-check-circle verified"></i>
+                                        <span>Verified Budget Management</span>
+                                    </div>
+                                </div>
+                                <button class="btn-request" onclick="requestAccess('budgettracker')">
+                                    <i class="fas fa-plus"></i>
+                                    Request Access
+                                </button>
+                            </div>
+                            
+                            <div class="permissions-granted">
+                                <h4>Current Permissions:</h4>
+                                <div class="permission-list">
+                                    <div class="permission-item granted">
+                                        <i class="fas fa-wallet"></i>
+                                        <span>Account Balance</span>
+                                        <div class="permission-status">Active</div>
+                                    </div>
+                                    <div class="permission-item granted">
+                                        <i class="fas fa-chart-pie"></i>
+                                        <span>Spending Categories</span>
+                                        <div class="permission-status">Active</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Empty State -->
-                    <div v-if="filteredInstitutions.length === 0 && !selectedInstitution" class="empty-state">
-                        <i class="fas fa-search"></i>
-                        <h3>No institutions found</h3>
-                        <p>Try adjusting your search criteria</p>
+                        <!-- ExpenseManager -->
+                        <div class="institution-card">
+                            <div class="institution-header">
+                                <div class="institution-logo expensemanager">EXP</div>
+                                <div class="institution-info">
+                                    <h3>ExpenseManager</h3>
+                                    <div class="institution-status">
+                                        <i class="fas fa-check-circle verified"></i>
+                                        <span>Verified Expense Tracking</span>
+                                    </div>
+                                </div>
+                                <button class="btn-request" onclick="requestAccess('expensemanager')">
+                                    <i class="fas fa-plus"></i>
+                                    Request Access
+                                </button>
+                            </div>
+                            
+                            <div class="permissions-granted">
+                                <h4>Current Permissions:</h4>
+                                <div class="permission-list">
+                                    <div class="permission-item granted">
+                                        <i class="fas fa-receipt"></i>
+                                        <span>Transaction Data</span>
+                                        <div class="permission-status">Active</div>
+                                    </div>
+                                    <div class="permission-item pending">
+                                        <i class="fas fa-camera"></i>
+                                        <span>Receipt Scanning</span>
+                                        <div class="permission-status">Pending</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </AppLayout>
             `
