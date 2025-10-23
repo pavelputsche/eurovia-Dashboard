@@ -25,37 +25,99 @@
             },
             setup() {
                 const activeTab = ref('pending');
-                const requests = ref(mockData.requests);
-                const spamRequests = ref([
+                
+                // Pending access requests from institutions
+                const pendingRequests = ref([
+                    {
+                        id: 1,
+                        appName: 'Deutsche Rentenversicherung',
+                        icon: 'drv',
+                        requestDate: '2025-10-14',
+                        status: 'New Request',
+                        permissions: ['Investment portfolio overview', 'Account balance information', 'Transaction history (last 12 months)', 'Personal identification data'],
+                        verified: true,
+                        description: 'Deutsche Rentenversicherung is requesting access to view your investment portfolio for pension calculation purposes.',
+                        duration: '1 year'
+                    },
+                    {
+                        id: 2,
+                        appName: 'Investment Advisor Pro',
+                        icon: 'invest',
+                        requestDate: '2025-09-20',
+                        status: 'Pending',
+                        permissions: ['Portfolio Overview & Performance'],
+                        verified: true,
+                        description: 'Investment Advisor Pro wants to analyze your portfolio performance and provide personalized investment recommendations.',
+                        duration: '1 year'
+                    },
                     {
                         id: 3,
-                        appName: 'FakeBank',
-                        icon: 'fas fa-exclamation-triangle',
-                        requestDate: '2024-10-18',
+                        appName: 'Crypto Portfolio Tracker',
+                        icon: 'crypto',
+                        requestDate: '2025-10-18',
+                        status: 'Pending',
+                        permissions: ['Cryptocurrency Holdings & Transactions'],
+                        verified: true,
+                        description: 'Crypto Portfolio Tracker requests access to your cryptocurrency transactions for comprehensive portfolio analysis.',
+                        duration: '6 months'
+                    }
+                ]);
+
+                const spamRequests = ref([
+                    {
+                        id: 4,
+                        appName: 'QuickRich Investment',
+                        icon: 'suspicious',
+                        requestDate: '2025-10-19',
                         status: 'Spam',
-                        permissions: ['Full account access', 'Password reset'],
-                        verified: false
+                        permissions: ['Complete financial profile', 'Investment history and holdings', 'Personal identification data', 'Account access credentials'],
+                        verified: false,
+                        description: '⚠️ WARNING: QuickRich Investment is an unverified entity requesting extensive access to your financial data. This appears to be a fraudulent investment scheme.',
+                        spamFlags: ['Unverified domain', 'Suspicious request pattern', 'Excessive permissions requested']
+                    },
+                    {
+                        id: 5,
+                        appName: 'CryptoMiner Express',
+                        icon: 'crypto-fake',
+                        requestDate: '2025-10-21',
+                        status: 'Spam',
+                        permissions: ['Account Access & Transaction Authorization'],
+                        verified: false,
+                        description: 'Suspicious cryptocurrency mining service requesting unauthorized access.',
+                        spamFlags: ['No business license found', 'Requesting transaction authorization', 'Recent domain registration']
                     }
                 ]);
 
                 const filteredRequests = computed(() => {
-                    return activeTab.value === 'pending' ? requests.value : spamRequests.value;
+                    return activeTab.value === 'pending' ? pendingRequests.value : spamRequests.value;
                 });
 
                 const handleApproveRequest = (requestId) => {
-                    const request = requests.value.find(r => r.id === requestId);
-                    if (request && confirm(`Approve access request for ${request.appName}?`)) {
+                    const request = pendingRequests.value.find(r => r.id === requestId);
+                    if (request && confirm(`Grant access to ${request.appName}?`)) {
                         request.status = 'Approved';
-                        utils.showNotification(`${request.appName} request approved!`, 'success');
+                        pendingRequests.value = pendingRequests.value.filter(r => r.id !== requestId);
+                        utils.showNotification(`Access granted to ${request.appName}`, 'success');
                     }
                 };
 
                 const handleRejectRequest = (requestId) => {
-                    const request = requests.value.find(r => r.id === requestId);
-                    if (request && confirm(`Reject access request for ${request.appName}?`)) {
-                        requests.value = requests.value.filter(r => r.id !== requestId);
-                        utils.showNotification(`${request.appName} request rejected`, 'warning');
+                    const request = pendingRequests.value.find(r => r.id === requestId);
+                    if (request && confirm(`Decline access request from ${request.appName}?`)) {
+                        pendingRequests.value = pendingRequests.value.filter(r => r.id !== requestId);
+                        utils.showNotification(`${request.appName} request declined`, 'warning');
                     }
+                };
+
+                const getInstitutionLogo = (icon) => {
+                    const logoMap = {
+                        'drv': 'DRV',
+                        'invest': 'INV', 
+                        'crypto': 'CRY',
+                        'suspicious': 'SUS',
+                        'crypto-fake': 'MIN'
+                    };
+                    return logoMap[icon] || icon.toUpperCase().slice(0,3);
                 };
 
                 const handleQuickAction = (action) => {
@@ -73,12 +135,13 @@
 
                 return {
                     activeTab,
-                    requests,
+                    pendingRequests,
                     spamRequests,
                     filteredRequests,
                     handleApproveRequest,
                     handleRejectRequest,
                     handleQuickAction,
+                    getInstitutionLogo,
                     utils
                 };
             },
@@ -92,9 +155,9 @@
                                 class="tab-btn"
                                 :class="{ 'active': activeTab === 'pending' }"
                             >
-                                <i class="fas fa-clock"></i>
+                                <i class="fas fa-inbox"></i>
                                 Pending Requests
-                                <span class="badge">{{ requests.length }}</span>
+                                <span class="badge">{{ pendingRequests.length }}</span>
                             </button>
                             <button 
                                 @click="activeTab = 'spam'"
@@ -109,71 +172,109 @@
                     </div>
 
                     <!-- Requests List -->
-                    <div class="requests-list">
+                    <div class="requests-grid" v-if="activeTab === 'pending'">
                         <div 
                             v-for="request in filteredRequests" 
                             :key="request.id"
-                            class="request-card"
-                            :class="{ 'spam': activeTab === 'spam' }"
+                            class="permission-card request"
+                            :class="{ 'request': true }"
                         >
-                            <div class="card-header">
-                                <div class="app-info">
-                                    <div class="app-icon" :class="{ 'warning': !request.verified }">
-                                        <i :class="request.icon"></i>
+                            <div class="permission-header">
+                                <div class="institution-info">
+                                    <div class="institution-logo" :class="request.icon">
+                                        {{ getInstitutionLogo(request.icon) }}
                                     </div>
-                                    <div class="app-details">
-                                        <h3 class="app-name">{{ request.appName }}</h3>
-                                        <div class="app-verification">
+                                    <div class="institution-details">
+                                        <h3>{{ request.appName }}</h3>
+                                        <div class="verification-badge">
                                             <i class="fas fa-check-circle" v-if="request.verified"></i>
                                             <i class="fas fa-exclamation-triangle" v-else></i>
-                                            <span>{{ request.verified ? 'Verified' : 'Unverified Source' }}</span>
-                                        </div>
-                                        <div class="request-date">
-                                            Requested {{ utils.formatTimeAgo(request.requestDate) }}
+                                            <span>{{ request.verified ? 'Verified' : 'Unverified' }}</span>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="request-status" :class="request.status.toLowerCase()">
+                                <div class="request-badge" :class="{ 'new': request.status === 'New Request' }">
                                     {{ request.status }}
                                 </div>
                             </div>
 
-                            <div class="card-content">
-                                <div class="permissions-list">
-                                    <h4>Requested Permissions:</h4>
-                                    <ul>
-                                        <li v-for="permission in request.permissions" :key="permission">
-                                            <i class="fas fa-key"></i>
-                                            {{ permission }}
-                                        </li>
-                                    </ul>
+                            <div class="permission-details">
+                                <div class="permission-type">
+                                    <i class="fas fa-chart-line"></i>
+                                    <span>{{ request.permissions[0] }}</span>
+                                </div>
+                                <div class="permission-duration">
+                                    <span>Requested: {{ utils.formatDate(request.requestDate) }}</span>
+                                    <span>Duration: {{ request.duration }}</span>
+                                </div>
+                                <div class="request-details">
+                                    <p>{{ request.description }}</p>
                                 </div>
                             </div>
 
-                            <div class="card-actions" v-if="activeTab === 'pending'">
+                            <div class="permission-actions">
                                 <button @click="handleApproveRequest(request.id)" class="btn-approve">
-                                    <i class="fas fa-check"></i>
-                                    Approve
+                                    {{ request.appName.includes('Deutsche') ? 'Zugriff gewähren' : 'Grant Access' }}
                                 </button>
-                                <button @click="handleRejectRequest(request.id)" class="btn-reject">
-                                    <i class="fas fa-times"></i>
-                                    Reject
+                                <button @click="handleRejectRequest(request.id)" class="btn-decline">
+                                    {{ request.appName.includes('Deutsche') ? 'Ablehnen' : 'Decline' }}
                                 </button>
-                                <button class="btn-details">
+                                <button class="btn-info">
                                     <i class="fas fa-info-circle"></i>
-                                    Details
                                 </button>
                             </div>
+                        </div>
+                    </div>
 
-                            <div class="card-actions" v-else>
-                                <button class="btn-reject">
-                                    <i class="fas fa-ban"></i>
-                                    Block Permanently
-                                </button>
-                                <button class="btn-details">
-                                    <i class="fas fa-eye"></i>
-                                    Review
-                                </button>
+                    <!-- Spam Requests -->
+                    <div v-else class="requests-grid">
+                        <div class="spam-info">
+                            <div class="spam-warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span>These requests are from unverified sources and have been automatically flagged as potential spam.</span>
+                            </div>
+                        </div>
+                        
+                        <div 
+                            v-for="request in filteredRequests" 
+                            :key="request.id"
+                            class="permission-card request spam"
+                        >
+                            <div class="permission-header">
+                                <div class="institution-info">
+                                    <div class="institution-logo" :class="request.icon">
+                                        {{ getInstitutionLogo(request.icon) }}
+                                    </div>
+                                    <div class="institution-details">
+                                        <h3>{{ request.appName }}</h3>
+                                        <div class="verification-badge unverified">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                            <span>Unverified</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="request-badge spam">Spam</div>
+                            </div>
+
+                            <div class="permission-details">
+                                <div class="permission-type">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    <span>{{ request.permissions[0] }}</span>
+                                </div>
+                                <div class="permission-duration">
+                                    <span>Requested: {{ utils.formatDate(request.requestDate) }}</span>
+                                    <span>Duration: Permanent</span>
+                                </div>
+                                <div class="spam-flags" v-if="request.spamFlags">
+                                    <div class="flag-item" v-for="flag in request.spamFlags" :key="flag">
+                                        ⚠️ {{ flag }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="permission-actions">
+                                <button class="btn-approve">Allow Request</button>
+                                <button class="btn-block">Block Permanently</button>
                             </div>
                         </div>
                     </div>
