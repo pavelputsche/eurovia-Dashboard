@@ -24,74 +24,6 @@
                 AppLayout
             },
             setup() {
-                const expiringPermissions = ref(
-                    mockData.permissions.filter(p => p.isExpiring)
-                );
-                
-                const renewalStatus = ref({});
-
-                const handleRenewSingle = (permissionId) => {
-                    const permission = expiringPermissions.value.find(p => p.id === permissionId);
-                    if (permission) {
-                        renewalStatus.value[permissionId] = 'renewing';
-                        
-                        // Simulate API call
-                        setTimeout(() => {
-                            renewalStatus.value[permissionId] = 'renewed';
-                            utils.showNotification(`${permission.appName} permissions renewed successfully!`, 'success');
-                        }, 1500);
-                    }
-                };
-
-                const handleRenewAll = () => {
-                    if (confirm(`Are you sure you want to renew all ${expiringPermissions.value.length} expiring permissions?`)) {
-                        expiringPermissions.value.forEach(permission => {
-                            if (!renewalStatus.value[permission.id]) {
-                                renewalStatus.value[permission.id] = 'renewing';
-                                
-                                setTimeout(() => {
-                                    renewalStatus.value[permission.id] = 'renewed';
-                                }, 1000 + Math.random() * 2000);
-                            }
-                        });
-                        
-                        utils.showNotification('Renewing all expiring permissions...', 'info');
-                        
-                        setTimeout(() => {
-                            utils.showNotification('All permissions renewed successfully!', 'success');
-                        }, 3000);
-                    }
-                };
-
-                const getDaysToExpiry = (expiryDate) => {
-                    const today = new Date();
-                    const expiry = new Date(expiryDate);
-                    const diffTime = expiry - today;
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    return diffDays;
-                };
-
-                const getButtonText = (permissionId) => {
-                    const status = renewalStatus.value[permissionId];
-                    if (status === 'renewing') return 'Renewing...';
-                    if (status === 'renewed') return 'Renewed';
-                    return 'Renew Now';
-                };
-
-                const getButtonClass = (permissionId) => {
-                    const status = renewalStatus.value[permissionId];
-                    return {
-                        'btn-renew': !status || status === 'pending',
-                        'btn-renewing': status === 'renewing',
-                        'btn-renewed': status === 'renewed'
-                    };
-                };
-
-                const isButtonDisabled = (permissionId) => {
-                    const status = renewalStatus.value[permissionId];
-                    return status === 'renewing' || status === 'renewed';
-                };
-
                 const handleQuickAction = (action) => {
                     switch(action) {
                         case 'request-access':
@@ -103,127 +35,41 @@
                 };
 
                 return {
-                    expiringPermissions,
-                    renewalStatus,
-                    handleRenewSingle,
-                    handleRenewAll,
-                    getDaysToExpiry,
-                    getButtonText,
-                    getButtonClass,
-                    isButtonDisabled,
                     handleQuickAction,
                     utils
                 };
             },
             template: `
                 <AppLayout page-title="Renew Permissions" current-page="renew-permissions" @quick-action="handleQuickAction">
-                    <!-- Page Header -->
-                    <div class="renew-header">
-                        <div class="header-content">
-                            <div class="header-text">
-                                <h2>Review and Renew Expiring Permissions</h2>
-                                <p>These permissions will expire soon and may need your attention</p>
+                    <!-- BudgetTracker -->
+                    <div class="permission-card active">
+                        <div class="permission-header">
+                            <div class="institution-info">
+                                <div class="institution-logo budget">BT</div>
+                                <div class="institution-details">
+                                    <h3>BudgetTracker</h3>
+                                    <div class="verification-badge">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Verified</span>
+                                    </div>
+                                </div>
                             </div>
-                            <button @click="() => window.history.back()" class="btn-back">
-                                <i class="fas fa-arrow-left"></i>
-                                Back
-                            </button>
+                            <div class="permission-status expiring">Expiring Soon</div>
                         </div>
                         
-                        <div class="expiry-summary" v-if="expiringPermissions.length > 0">
-                            <div class="summary-card warning">
-                                <i class="fas fa-exclamation-triangle"></i>
-                                <div class="summary-text">
-                                    <strong>{{ expiringPermissions.length }} permissions expiring soon</strong>
-                                    <span>These permissions will expire within the next 30 days</span>
-                                </div>
-                                <button @click="handleRenewAll" class="btn-renew-all">
-                                    <i class="fas fa-sync-alt"></i>
-                                    Renew All
-                                </button>
+                        <div class="permission-details">
+                            <div class="permission-type">
+                                <i class="fas fa-chart-pie"></i>
+                                <span>Account Balance & Categories</span>
+                            </div>
+                            <div class="permission-duration">
+                                <span>15.06.2025 - 25.10.2025</span>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Expiring Permissions Cards -->
-                    <div v-if="expiringPermissions.length > 0" class="renewal-cards">
-                        <div 
-                            v-for="permission in expiringPermissions" 
-                            :key="permission.id"
-                            class="renewal-card"
-                        >
-                            <div class="card-header">
-                                <div class="app-info">
-                                    <div class="app-icon large">
-                                        <i :class="permission.icon"></i>
-                                    </div>
-                                    <div class="app-details">
-                                        <h3 class="app-name">{{ permission.appName }}</h3>
-                                        <div class="app-verification">
-                                            <i class="fas fa-check-circle"></i>
-                                            <span>Verified Application</span>
-                                        </div>
-                                        <div class="expiry-warning">
-                                            <i class="fas fa-clock"></i>
-                                            <span>Expires in {{ getDaysToExpiry(permission.expiryDate) }} days</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button 
-                                    @click="handleRenewSingle(permission.id)"
-                                    :class="getButtonClass(permission.id)"
-                                    :disabled="isButtonDisabled(permission.id)"
-                                >
-                                    <i class="fas fa-sync-alt" :class="{ 'fa-spin': renewalStatus[permission.id] === 'renewing' }"></i>
-                                    {{ getButtonText(permission.id) }}
-                                </button>
-                            </div>
-
-                            <div class="card-content">
-                                <h4>Granted Permissions:</h4>
-                                <div class="permissions-list">
-                                    <div 
-                                        v-for="perm in permission.permissions" 
-                                        :key="perm"
-                                        class="permission-item"
-                                    >
-                                        <i class="fas fa-check"></i>
-                                        <span>{{ perm }}</span>
-                                        <span class="permission-type">Read</span>
-                                    </div>
-                                </div>
-
-                                <div class="renewal-info">
-                                    <div class="info-item">
-                                        <span class="label">Current expiry:</span>
-                                        <span class="value">{{ utils.formatDate(permission.expiryDate) }}</span>
-                                    </div>
-                                    <div class="info-item">
-                                        <span class="label">New expiry:</span>
-                                        <span class="value">{{ utils.formatDate(new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)) }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Empty State -->
-                    <div v-else class="empty-state">
-                        <div class="empty-content">
-                            <i class="fas fa-check-circle"></i>
-                            <h3>All Permissions Are Up to Date!</h3>
-                            <p>No permissions require renewal at this time.</p>
-                            <p>Check back later or visit "My Permissions" to manage your access.</p>
-                            <div class="empty-actions">
-                                <a href="permissions.html" class="btn-primary">
-                                    <i class="fas fa-key"></i>
-                                    View All Permissions
-                                </a>
-                                <a href="request-access.html" class="btn-secondary">
-                                    <i class="fas fa-plus"></i>
-                                    Request New Access
-                                </a>
-                            </div>
+                        
+                        <div class="permission-actions">
+                            <button class="btn-renew">Renew Access</button>
+                            <button class="btn-revoke">Revoke</button>
                         </div>
                     </div>
                 </AppLayout>
