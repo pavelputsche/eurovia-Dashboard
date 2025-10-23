@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Eurovia Banking</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div id="app"></div>
+
+    <!-- Vue.js 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script type="module">
+        import AppLayout from '../components/AppLayout.js';
+        import { utils, mockData } from '../js/common.js';
+
+        const { createApp, ref, computed, onMounted } = Vue;
+
+        const DashboardApp = {
+            components: {
+                AppLayout
+            },
+            setup() {
+                const stats = ref({
+                    myPermissions: 12,
+                    expiringSoon: 7,
+                    connectedApps: 8,
+                    avgDaysToRenew: 24,
+                    pendingRequests: 3,
+                    accessHealth: 94
+                });
+
+                const recentActivity = ref([
+                    { action: 'Slack integration updated', time: '2h ago' },
+                    { action: '3 permissions approved', time: '3h ago' },
+                    { action: 'Weekly review completed', time: '1d ago' },
+                    { action: 'CRM access renewed', time: '2d ago' },
+                    { action: 'New app connected', time: '3d ago' }
+                ]);
+
+                const alerts = ref([
+                    { type: 'warning', message: 'Urgent: 2 expiring tomorrow', icon: 'fas fa-exclamation-triangle' },
+                    { type: 'info', message: 'Review: 5 pending requests', icon: 'fas fa-inbox' },
+                    { type: 'info', message: 'Info: Security review due', icon: 'fas fa-shield-alt' }
+                ]);
+
+                const quickActions = ref([
+                    { title: 'New Request', icon: 'fas fa-plus', action: 'new-request', class: 'primary' },
+                    { title: 'Renew All', icon: 'fas fa-sync', action: 'renew-all', class: 'secondary' },
+                    { title: 'Revoke Access', icon: 'fas fa-ban', action: 'revoke-access', class: 'danger' }
+                ]);
+
+                const handleQuickAction = (action) => {
+                    switch(action) {
+                        case 'new-request':
+                            window.location.href = 'request-access.html';
+                            break;
+                        case 'renew-all':
+                            window.location.href = 'renew-permissions.html';
+                            break;
+                        case 'revoke-access':
+                            if (confirm('Are you sure you want to revoke access?')) {
+                                utils.showNotification('Access revoked successfully', 'warning');
+                            }
+                            break;
+                    }
+                };
+
+                const handleActionBtnClick = (action) => {
+                    handleQuickAction(action);
+                };
+
+                return {
+                    stats,
+                    recentActivity,
+                    alerts,
+                    quickActions,
+                    handleQuickAction,
+                    handleActionBtnClick
+                };
+            },
+            template: `
+                <AppLayout page-title="Dashboard" current-page="dashboard" @quick-action="handleQuickAction">
+                    <!-- Overview & Account Summary -->
+                    <div class="overview-section">
+                        <div class="section-header">
+                            <h2>Overview & Account Summary</h2>
+                            <button class="btn-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </button>
+                        </div>
+
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-number">{{ stats.myPermissions }}</div>
+                                <div class="stat-label">My Permissions</div>
+                                <div class="stat-sublabel">2 this month</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">{{ stats.expiringSoon }}</div>
+                                <div class="stat-label">Expiring Soon</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">{{ stats.connectedApps }}</div>
+                                <div class="stat-label">Connected Apps</div>
+                                <div class="stat-sublabel">3 Inactive</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">{{ stats.avgDaysToRenew }}</div>
+                                <div class="stat-label">Avg Days to Renew</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">{{ stats.pendingRequests }}</div>
+                                <div class="stat-label">Pending Requests</div>
+                                <div class="stat-sublabel">Awaiting approval</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">{{ stats.accessHealth }}%</div>
+                                <div class="stat-label">Access Health</div>
+                            </div>
+                        </div>
+
+                        <div class="account-status">
+                            <div class="status-indicator active">Account Active</div>
+                        </div>
+                    </div>
+
+                    <!-- Activity and Alerts -->
+                    <div class="activity-alerts-grid">
+                        <!-- Recent Activity -->
+                        <div class="activity-section">
+                            <h3>Recent Activity</h3>
+                            <div class="activity-list">
+                                <div 
+                                    v-for="activity in recentActivity" 
+                                    :key="activity.action"
+                                    class="activity-item"
+                                >
+                                    <div class="activity-text">{{ activity.action }}</div>
+                                    <div class="activity-time">{{ activity.time }}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Alerts -->
+                        <div class="alerts-section">
+                            <h3>Alerts</h3>
+                            <div class="alerts-list">
+                                <div 
+                                    v-for="alert in alerts" 
+                                    :key="alert.message"
+                                    class="alert-item"
+                                    :class="alert.type"
+                                >
+                                    <i :class="alert.icon"></i>
+                                    <span>{{ alert.message }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom sections grid -->
+                    <div class="bottom-sections-grid">
+                        <!-- Sharing Permissions -->
+                        <div class="section-card">
+                            <div class="section-header">
+                                <h3>Sharing Permissions</h3>
+                                <i class="fas fa-share-alt"></i>
+                            </div>
+                            <div class="section-content">
+                                <p>Manage how your data is shared</p>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="section-card">
+                            <div class="section-header">
+                                <h3>Quick Actions</h3>
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <div class="section-content">
+                                <div class="quick-actions-grid">
+                                    <button 
+                                        v-for="action in quickActions"
+                                        :key="action.action"
+                                        class="action-btn"
+                                        :class="action.class"
+                                        @click="handleActionBtnClick(action.action)"
+                                    >
+                                        <i :class="action.icon"></i>
+                                        {{ action.title }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Third Parties -->
+                        <div class="section-card">
+                            <div class="section-header">
+                                <h3>Third Parties</h3>
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="section-content">
+                                <p>Connected third-party services</p>
+                            </div>
+                        </div>
+                    </div>
+                </AppLayout>
+            `
+        };
+
+        createApp(DashboardApp).mount('#app');
+    </script>
+</body>
+</html>

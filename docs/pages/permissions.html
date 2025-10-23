@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Permissions - Eurovia Banking</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div id="app"></div>
+
+    <!-- Vue.js 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script type="module">
+        import AppLayout from '../components/AppLayout.js';
+        import { utils, mockData } from '../js/common.js';
+
+        const { createApp, ref, computed, onMounted } = Vue;
+
+        const PermissionsApp = {
+            components: {
+                AppLayout
+            },
+            setup() {
+                const permissions = ref(mockData.permissions);
+                const searchTerm = ref('');
+                const statusFilter = ref('all');
+
+                const filteredPermissions = computed(() => {
+                    let filtered = permissions.value;
+
+                    if (searchTerm.value) {
+                        filtered = filtered.filter(p => 
+                            p.appName.toLowerCase().includes(searchTerm.value.toLowerCase())
+                        );
+                    }
+
+                    if (statusFilter.value !== 'all') {
+                        filtered = filtered.filter(p => {
+                            if (statusFilter.value === 'active') return p.status === 'Active';
+                            if (statusFilter.value === 'expiring') return p.status === 'Expiring Soon';
+                            return true;
+                        });
+                    }
+
+                    return filtered;
+                });
+
+                const stats = computed(() => {
+                    const total = permissions.value.length;
+                    const active = permissions.value.filter(p => p.status === 'Active').length;
+                    const expiring = permissions.value.filter(p => p.status === 'Expiring Soon').length;
+                    
+                    return { total, active, expiring };
+                });
+
+                const handleRenewPermission = (permissionId) => {
+                    const permission = permissions.value.find(p => p.id === permissionId);
+                    if (permission) {
+                        permission.status = 'Active';
+                        permission.isExpiring = false;
+                        permission.expiryDate = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+                        utils.showNotification(`${permission.appName} permissions renewed successfully!`, 'success');
+                    }
+                };
+
+                const handleRevokePermission = (permissionId) => {
+                    const permission = permissions.value.find(p => p.id === permissionId);
+                    if (permission && confirm(`Are you sure you want to revoke access for ${permission.appName}?`)) {
+                        permissions.value = permissions.value.filter(p => p.id !== permissionId);
+                        utils.showNotification(`${permission.appName} access revoked successfully`, 'warning');
+                    }
+                };
+
+                const getDaysToExpiry = (expiryDate) => {
+                    const today = new Date();
+                    const expiry = new Date(expiryDate);
+                    const diffTime = expiry - today;
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    return diffDays;
+                };
+
+                const getStatusClass = (status) => {
+                    return {
+                        'status-active': status === 'Active',
+                        'status-expiring': status === 'Expiring Soon',
+                        'status-expired': status === 'Expired'
+                    };
+                };
+
+                const handleQuickAction = (action) => {
+                    switch(action) {
+                        case 'renew-permissions':
+                            window.location.href = 'renew-permissions.html';
+                            break;
+                        case 'request-access':
+                            window.location.href = 'request-access.html';
+                            break;
+                        default:
+                            utils.showNotification(`${action} functionality would be implemented here`, 'info');
+                    }
+                };
+
+                return {
+                    permissions,
+                    searchTerm,
+                    statusFilter,
+                    filteredPermissions,
+                    stats,
+                    handleRenewPermission,
+                    handleRevokePermission,
+                    getDaysToExpiry,
+                    getStatusClass,
+                    handleQuickAction,
+                    utils
+                };
+            },
+            template: `
+                <AppLayout page-title="My Permissions" current-page="permissions" @quick-action="handleQuickAction">
+                    <!-- Permissions Header -->
+                    <div class="permissions-header">
+                        <div class="permissions-stats">
+                            <div class="stat-item">
+                                <span class="stat-number">{{ stats.total }}</span>
+                                <span class="stat-label">Total Permissions</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">{{ stats.active }}</span>
+                                <span class="stat-label">Active</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">{{ stats.expiring }}</span>
+                                <span class="stat-label">Expiring Soon</span>
+                            </div>
+                        </div>
+
+                        <div class="permissions-controls">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input 
+                                    type="text" 
+                                    placeholder="Search permissions..." 
+                                    v-model="searchTerm"
+                                >
+                            </div>
+                            <select v-model="statusFilter" class="filter-select">
+                                <option value="all">All Status</option>
+                                <option value="active">Active</option>
+                                <option value="expiring">Expiring Soon</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Permissions Grid -->
+                    <div class="permissions-grid">
+                        <div 
+                            v-for="permission in filteredPermissions" 
+                            :key="permission.id"
+                            class="permission-card"
+                        >
+                            <div class="card-header">
+                                <div class="app-info">
+                                    <div class="app-icon">
+                                        <i :class="permission.icon"></i>
+                                    </div>
+                                    <div class="app-details">
+                                        <h3 class="app-name">{{ permission.appName }}</h3>
+                                        <div class="app-verification">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>Verified</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="permission-status" :class="getStatusClass(permission.status)">
+                                    {{ permission.status }}
+                                </div>
+                            </div>
+
+                            <div class="card-content">
+                                <div class="permissions-list">
+                                    <h4>Granted Permissions:</h4>
+                                    <ul>
+                                        <li v-for="perm in permission.permissions" :key="perm">
+                                            <i class="fas fa-check"></i>
+                                            {{ perm }}
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="permission-dates">
+                                    <div class="date-item">
+                                        <span class="date-label">Granted:</span>
+                                        <span class="date-value">{{ utils.formatDate(permission.grantedDate) }}</span>
+                                    </div>
+                                    <div class="date-item">
+                                        <span class="date-label">Expires:</span>
+                                        <span class="date-value" :class="{ 'expiring': permission.isExpiring }">
+                                            {{ utils.formatDate(permission.expiryDate) }}
+                                            <span v-if="permission.isExpiring" class="days-remaining">
+                                                ({{ getDaysToExpiry(permission.expiryDate) }} days)
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-actions">
+                                <button 
+                                    v-if="permission.isExpiring"
+                                    @click="handleRenewPermission(permission.id)"
+                                    class="btn-renew"
+                                >
+                                    <i class="fas fa-sync-alt"></i>
+                                    Renew Access
+                                </button>
+                                <button 
+                                    @click="handleRevokePermission(permission.id)"
+                                    class="btn-revoke"
+                                >
+                                    <i class="fas fa-ban"></i>
+                                    Revoke
+                                </button>
+                                <button class="btn-details">
+                                    <i class="fas fa-info-circle"></i>
+                                    Details
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Empty state -->
+                    <div v-if="filteredPermissions.length === 0" class="empty-state">
+                        <i class="fas fa-key"></i>
+                        <h3>No permissions found</h3>
+                        <p>Try adjusting your search or filter criteria</p>
+                    </div>
+                </AppLayout>
+            `
+        };
+
+        createApp(PermissionsApp).mount('#app');
+    </script>
+</body>
+</html>
