@@ -236,56 +236,147 @@ body {
     padding: 25px;
 }
 
-/* Account Summary */
-.account-summary {
+/* Overview Grid Layout */
+.overview-grid {
+    display: grid;
+    grid-template-columns: 2fr 1.5fr 1.5fr;
+    gap: 30px;
+    align-items: start;
+}
+
+.permission-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.stat-card {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    background: #e9ecef;
+    transform: translateY(-2px);
+}
+
+.stat-card .stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 5px;
+}
+
+.stat-card .stat-label {
+    font-size: 0.9rem;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 3px;
+}
+
+.stat-card .stat-sublabel {
+    font-size: 0.8rem;
+    color: #28a745;
+    font-weight: 500;
+}
+
+.stat-card.account-status {
+    background: #d4edda;
+    border-color: #c3e6cb;
+    grid-column: span 2;
+}
+
+.status-label {
+    font-size: 1rem;
+    color: #155724;
+    font-weight: 600;
+    padding: 10px 0;
+}
+
+/* Recent Activity */
+.recent-activity h4,
+.alerts-section h4 {
+    margin-bottom: 15px;
+    color: #2c3e50;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.activity-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 30px;
+    padding: 10px 12px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border-left: 3px solid #667eea;
 }
 
-.balance-info {
-    display: flex;
-    gap: 40px;
-}
-
-.balance-item {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.balance-label {
+.activity-text {
     font-size: 0.9rem;
+    color: #333;
+    flex: 1;
+}
+
+.activity-time {
+    font-size: 0.8rem;
     color: #666;
     font-weight: 500;
 }
 
-.balance-value {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #2c3e50;
-}
-
-.quick-stats {
+/* Alerts Section */
+.alert-list {
     display: flex;
-    gap: 30px;
+    flex-direction: column;
+    gap: 12px;
 }
 
-.stat-item {
-    text-align: center;
+.alert-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
 }
 
-.stat-number {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #667eea;
+.alert-item.urgent {
+    background: #fff5f5;
+    border-color: #fed7d7;
 }
 
-.stat-label {
-    font-size: 0.85rem;
-    color: #666;
-    margin-top: 5px;
+.alert-item.warning {
+    background: #fffbf0;
+    border-color: #feebc8;
+}
+
+.alert-item.info {
+    background: #f0f8ff;
+    border-color: #bee3f8;
+}
+
+.alert-icon {
+    font-size: 1.2rem;
+}
+
+.alert-content {
+    flex: 1;
+}
+
+.alert-title {
+    font-size: 0.9rem;
+    color: #333;
+    font-weight: 500;
 }
 
 /* Permission List */
@@ -492,19 +583,22 @@ body {
         grid-template-columns: 1fr;
     }
 
-    .account-summary {
-        flex-direction: column;
-        gap: 20px;
-        text-align: center;
-    }
-
-    .balance-info {
-        flex-direction: column;
+    .overview-grid {
+        grid-template-columns: 1fr;
         gap: 20px;
     }
 
-    .quick-stats {
-        gap: 20px;
+    .permission-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .stat-card {
+        padding: 15px;
+    }
+
+    .stat-card .stat-number {
+        font-size: 1.5rem;
     }
 }
 
@@ -522,12 +616,818 @@ body {
         padding: 20px;
     }
 
-    .balance-value {
-        font-size: 1.5rem;
+    .permission-stats {
+        grid-template-columns: 1fr;
     }
 
-    .stat-number {
-        font-size: 1.5rem;
+    .stat-card {
+        padding: 12px;
+    }
+
+    .stat-card .stat-number {
+        font-size: 1.3rem;
+    }
+
+    .activity-item,
+    .alert-item {
+        padding: 8px;
+    }
+}
+
+/* Permissions Page Styles */
+.permissions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e1e8ed;
+}
+
+.permissions-summary {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.total-permissions {
+    background: #667eea;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.expiring-soon {
+    background: #ffc107;
+    color: #856404;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.permissions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 20px;
+}
+
+/* Permission Card Styles */
+.permission-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid #e1e8ed;
+}
+
+.permission-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.permission-card.active {
+    border-left: 4px solid #28a745;
+}
+
+.permission-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.institution-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.institution-logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1rem;
+    color: white;
+}
+
+.institution-logo.drv {
+    background: #0056b3;
+}
+
+.institution-logo.payment {
+    background: #28a745;
+}
+
+.institution-logo.budget {
+    background: #6f42c1;
+}
+
+.institution-logo.invest {
+    background: #fd7e14;
+}
+
+.institution-logo.tax {
+    background: #dc3545;
+}
+
+.institution-logo.insurance {
+    background: #20c997;
+}
+
+.institution-details h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.verification-badge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #28a745;
+    font-size: 0.85rem;
+    margin-top: 3px;
+}
+
+.verification-badge i {
+    font-size: 0.9rem;
+}
+
+.permission-status {
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.permission-status.active {
+    background: #d4edda;
+    color: #155724;
+}
+
+.permission-status.expiring {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.menu-btn {
+    background: none;
+    border: none;
+    color: #6c757d;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    transition: background 0.3s ease;
+}
+
+.menu-btn:hover {
+    background: #e9ecef;
+}
+
+.permission-details {
+    padding: 20px;
+}
+
+.permission-type {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.permission-type i {
+    color: #667eea;
+    font-size: 1.1rem;
+    width: 20px;
+}
+
+.permission-type span {
+    font-size: 1rem;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.permission-duration {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-left: 30px;
+}
+
+.permission-actions {
+    display: flex;
+    gap: 10px;
+    padding: 0 20px 20px;
+}
+
+.permission-actions button {
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+/* Info Button */
+.btn-info {
+    background: #17a2b8;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    margin-left: auto;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.btn-info:hover {
+    background: #138496;
+    transform: scale(1.1);
+}
+
+.permission-header {
+    position: relative;
+}
+
+.btn-approve {
+    background: #28a745;
+    color: white;
+}
+
+.btn-approve:hover {
+    background: #218838;
+    transform: translateY(-1px);
+}
+
+.btn-decline {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-decline:hover {
+    background: #c82333;
+    transform: translateY(-1px);
+}
+
+.btn-manage {
+    background: #667eea;
+    color: white;
+}
+
+.btn-manage:hover {
+    background: #5a6fd8;
+    transform: translateY(-1px);
+}
+
+.btn-revoke {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-revoke:hover {
+    background: #5a6268;
+    transform: translateY(-1px);
+}
+
+.btn-renew {
+    background: #ffc107;
+    color: #856404;
+}
+
+.btn-renew:hover {
+    background: #e0a800;
+    transform: translateY(-1px);
+}
+
+/* Responsive adjustments for permissions */
+@media (max-width: 768px) {
+    .permissions-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .permissions-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+    
+    .permissions-summary {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .permission-actions {
+        flex-direction: column;
+    }
+    
+    .institution-info {
+        gap: 10px;
+    }
+    
+    .institution-logo {
+        width: 40px;
+        height: 40px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Access Requests Page Styles */
+.requests-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e1e8ed;
+}
+
+.requests-summary {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.pending-requests {
+    background: #ffc107;
+    color: #856404;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.awaiting-review {
+    background: #dc3545;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.requests-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 20px;
+}
+
+.permission-card.request {
+    border-left: 4px solid #ffc107;
+    background: #fffbf0;
+}
+
+.request-badge {
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background: #ffc107;
+    color: #856404;
+}
+
+.request-badge.new {
+    background: #dc3545;
+    color: white;
+    animation: pulse 2s infinite;
+}
+
+.request-details {
+    margin-top: 15px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 6px;
+    border-left: 3px solid #667eea;
+}
+
+.request-details p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.5;
+}
+
+.permission-duration span {
+    display: block;
+    margin-bottom: 3px;
+}
+
+.institution-logo.crypto {
+    background: #f7931a;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(220, 53, 69, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+    }
+}
+
+/* Responsive adjustments for requests */
+@media (max-width: 768px) {
+    .requests-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .requests-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+    
+    .requests-summary {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+
+/* Request Tabs */
+.request-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #e1e8ed;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #6c757d;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tab-btn:hover {
+    color: #667eea;
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.tab-btn.active {
+    color: #667eea;
+    border-bottom-color: #667eea;
+    background: rgba(102, 126, 234, 0.1);
+}
+
+/* Fix tab content positioning */
+#requestsContent {
+    display: flex;
+    flex-direction: column;
+}
+
+.requests-header {
+    order: 1;
+}
+
+.request-tabs {
+    order: 2;
+}
+
+.tab-content {
+    order: 3;
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Ensure spam tab displays correctly */
+#spam-tab.active {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Spam Section Styles */
+.spam-info {
+    margin-bottom: 20px;
+}
+
+.spam-warning {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #856404;
+    font-size: 0.9rem;
+}
+
+.spam-warning i {
+    color: #ffc107;
+    font-size: 1.1rem;
+}
+
+.permission-card.spam {
+    border-left: 4px solid #dc3545;
+    background: #fff5f5;
+    position: relative;
+}
+
+.request-badge.spam {
+    background: #dc3545;
+    color: white;
+    animation: pulse 2s infinite;
+}
+
+.verification-badge.unverified {
+    color: #ffc107;
+}
+
+.verification-badge.unverified i {
+    color: #ffc107;
+}
+
+.spam-flags {
+    margin-top: 15px;
+    padding: 12px;
+    background: rgba(220, 53, 69, 0.1);
+    border-radius: 6px;
+    border-left: 3px solid #dc3545;
+}
+
+.flag-item {
+    font-size: 0.85rem;
+    color: #721c24;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.flag-item:last-child {
+    margin-bottom: 0;
+}
+
+.institution-logo.suspicious {
+    background: #dc3545;
+}
+
+.institution-logo.crypto-fake {
+    background: #6f42c1;
+}
+
+/* Responsive adjustments for tabs */
+@media (max-width: 768px) {
+    .request-tabs {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .tab-btn {
+        text-align: left;
+        border-bottom: none;
+        border-left: 3px solid transparent;
+    }
+    
+    .tab-btn.active {
+        border-bottom: none;
+        border-left-color: #667eea;
+    }
+}
+
+/* Revoked Access Page Styles */
+.revoked-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e1e8ed;
+}
+
+.revoked-summary {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.total-revoked {
+    background: #6c757d;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.denied-requests {
+    background: #dc3545;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.revoked-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 20px;
+}
+
+.permission-card.revoked {
+    border-left: 4px solid #6c757d;
+    background: #f8f9fa;
+    opacity: 0.9;
+}
+
+.permission-card.revoked.denied {
+    border-left: 4px solid #dc3545;
+    background: #fff5f5;
+}
+
+.revoked-status {
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.revoked-status.revoked {
+    background: #e2e3e5;
+    color: #495057;
+}
+
+.revoked-status.denied {
+    background: #f5c6cb;
+    color: #721c24;
+}
+
+.revoked-info {
+    margin-top: 15px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 6px;
+    border-left: 3px solid #6c757d;
+}
+
+.permission-card.revoked.denied .revoked-info {
+    border-left-color: #dc3545;
+}
+
+.revoked-date {
+    margin-bottom: 10px;
+}
+
+.revoked-date span {
+    display: block;
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 3px;
+}
+
+.revoked-reason {
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.4;
+}
+
+.revoked-reason strong {
+    color: #333;
+}
+
+/* Additional institution logos */
+.institution-logo.loan {
+    background: #17a2b8;
+}
+
+.institution-logo.marketing {
+    background: #e83e8c;
+}
+
+.institution-logo.social {
+    background: #6f42c1;
+}
+
+.institution-logo.oldbank {
+    background: #495057;
+}
+
+.institution-logo.gaming {
+    background: #fd7e14;
+}
+
+/* Revoked action buttons */
+.btn-review {
+    background: #17a2b8;
+    color: white;
+}
+
+.btn-review:hover {
+    background: #138496;
+    transform: translateY(-1px);
+}
+
+.btn-allow {
+    background: #28a745;
+    color: white;
+}
+
+.btn-allow:hover {
+    background: #218838;
+    transform: translateY(-1px);
+}
+
+.btn-restore {
+    background: #28a745;
+    color: white;
+}
+
+.btn-restore:hover {
+    background: #218838;
+    transform: translateY(-1px);
+}
+
+.btn-block {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-block:hover {
+    background: #c82333;
+    transform: translateY(-1px);
+}
+
+.btn-delete {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-delete:hover {
+    background: #5a6268;
+    transform: translateY(-1px);
+}
+
+.btn-unblock {
+    background: #ffc107;
+    color: #856404;
+}
+
+.btn-unblock:hover {
+    background: #e0a800;
+    transform: translateY(-1px);
+}
+
+.revoked-status.blocked {
+    background: #343a40;
+    color: white;
+}
+
+/* Unverified badge styling */
+.verification-badge i.fa-exclamation-triangle {
+    color: #ffc107;
+}
+
+/* Responsive adjustments for revoked */
+@media (max-width: 768px) {
+    .revoked-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .revoked-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+    
+    .revoked-summary {
+        width: 100%;
+        justify-content: space-between;
     }
 }
 
@@ -544,6 +1444,10 @@ body {
 }
 
 .tile {
+    animation: fadeIn 0.6s ease-out;
+}
+
+.permission-card {
     animation: fadeIn 0.6s ease-out;
 }
 
@@ -566,4 +1470,395 @@ body {
 
 .nav-item:hover::before, .quick-action-btn:hover::before {
     left: 100%;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 0;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s ease;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.close {
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.close:hover {
+    opacity: 0.7;
+}
+
+.modal-body {
+    padding: 25px;
+    max-height: 70vh;
+    overflow-y: auto;
+    line-height: 1.6;
+}
+
+.info-section {
+    margin-bottom: 20px;
+}
+
+.info-section h4 {
+    color: #667eea;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.info-list {
+    list-style: none;
+    padding: 0;
+}
+
+.info-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.info-list li:last-child {
+    border-bottom: none;
+}
+
+.security-warning {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 4px;
+}
+
+.security-warning.danger {
+    background: #f8d7da;
+    border-left-color: #dc3545;
+}
+
+.more-info-section {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e9ecef;
+}
+
+.more-info-section p {
+    margin-bottom: 10px;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.more-info-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 12px;
+    border: 1px solid #667eea;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.more-info-link:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.more-info-link i {
+    font-size: 0.8rem;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Request Access Page Styles */
+#requestAccessContent {
+    display: none;
+    padding: 20px;
+    background: #f8f9fa;
+    min-height: 100vh;
+}
+
+#requestAccessContent.show {
+    display: block !important;
+    min-height: 100vh !important;
+    height: auto !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+#requestAccessContent .page-header {
+    margin-bottom: 30px;
+}
+
+#requestAccessContent .page-header h2 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+#requestAccessContent .page-header p {
+    color: #6c757d;
+    font-size: 1.1rem;
+}
+
+.institutions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 25px;
+    margin-top: 25px;
+}
+
+.institution-card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.institution-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.institution-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.institution-logo {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.institution-logo.paymentapp {
+    background: linear-gradient(135deg, #28a745, #20c997);
+}
+
+.institution-logo.budgettracker {
+    background: linear-gradient(135deg, #17a2b8, #6f42c1);
+}
+
+.institution-logo.expensemanager {
+    background: linear-gradient(135deg, #ffc107, #fd7e14);
+}
+
+.institution-logo.investmenttracker {
+    background: linear-gradient(135deg, #dc3545, #e83e8c);
+}
+
+.institution-logo.taxhelper {
+    background: linear-gradient(135deg, #6c757d, #495057);
+}
+
+.institution-logo.creditmonitor {
+    background: linear-gradient(135deg, #007bff, #6610f2);
+}
+
+.institution-info {
+    flex: 1;
+    min-width: 200px;
+}
+
+.institution-info h3 {
+    margin: 0 0 8px 0;
+    color: #2c3e50;
+    font-size: 1.3rem;
+}
+
+.institution-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.institution-status .verified {
+    color: #28a745;
+}
+
+.btn-request {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.btn-request:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.permissions-granted {
+    border-top: 1px solid #e9ecef;
+    padding-top: 20px;
+}
+
+.permissions-granted h4 {
+    margin: 0 0 15px 0;
+    color: #495057;
+    font-size: 1.1rem;
+}
+
+.permission-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.permission-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border-left: 4px solid;
+}
+
+.permission-item.granted {
+    background: #d4edda;
+    border-left-color: #28a745;
+}
+
+.permission-item.pending {
+    background: #fff3cd;
+    border-left-color: #ffc107;
+}
+
+.permission-item.denied {
+    background: #f8d7da;
+    border-left-color: #dc3545;
+}
+
+.permission-item.available {
+    background: #d1ecf1;
+    border-left-color: #17a2b8;
+}
+
+.permission-item i {
+    color: #495057;
+    width: 20px;
+    text-align: center;
+}
+
+.permission-item span {
+    flex: 1;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.permission-status {
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.permission-item.granted .permission-status {
+    background: #28a745;
+    color: white;
+}
+
+.permission-item.pending .permission-status {
+    background: #ffc107;
+    color: #212529;
+}
+
+.permission-item.denied .permission-status {
+    background: #dc3545;
+    color: white;
+}
+
+.permission-item.available .permission-status {
+    background: #17a2b8;
+    color: white;
+}
+
+/* Responsive Design for Institution Cards */
+@media (max-width: 768px) {
+    .institutions-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .institution-header {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+    
+    .institution-info {
+        min-width: auto;
+    }
+    
+    .btn-request {
+        justify-content: center;
+    }
 }

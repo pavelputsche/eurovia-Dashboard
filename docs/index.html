@@ -60,6 +60,10 @@
                         <i class="fas fa-inbox"></i>
                         <span>Access Requests</span>
                     </a>
+                    <a href="#" class="nav-item" data-page="revoked">
+                        <i class="fas fa-ban"></i>
+                        <span>Revoked Access</span>
+                    </a>
                     <a href="#" class="nav-item" data-page="apps">
                         <i class="fas fa-plug"></i>
                         <span>Connected Apps</span>
@@ -97,29 +101,90 @@
                         <i class="fas fa-chart-line"></i>
                     </div>
                     <div class="tile-content">
-                        <div class="account-summary">
-                            <div class="balance-info">
-                                <div class="balance-item">
-                                    <span class="balance-label">Current Balance</span>
-                                    <span class="balance-value">$12,450.00</span>
+                        <div class="overview-grid">
+                            <!-- Left Section - Permission Stats -->
+                            <div class="permission-stats">
+                                <div class="stat-card">
+                                    <div class="stat-number">12</div>
+                                    <div class="stat-label">My Permissions</div>
+                                    <div class="stat-sublabel">↗ 2 this month</div>
                                 </div>
-                                <div class="balance-item">
-                                    <span class="balance-label">Available Credit</span>
-                                    <span class="balance-value">$5,000.00</span>
-                                </div>
-                            </div>
-                            <div class="quick-stats">
-                                <div class="stat-item">
+                                <div class="stat-card">
                                     <div class="stat-number">7</div>
-                                    <div class="stat-label">Connected Apps</div>
+                                    <div class="stat-label">Expiring Soon</div>
                                 </div>
-                                <div class="stat-item">
+                                <div class="stat-card">
+                                    <div class="stat-number">8</div>
+                                    <div class="stat-label">Connected Apps</div>
+                                    <div class="stat-sublabel">3 inactive</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number">24</div>
+                                    <div class="stat-label">Avg Days to Renew</div>
+                                </div>
+                                <div class="stat-card">
                                     <div class="stat-number">3</div>
                                     <div class="stat-label">Pending Requests</div>
+                                    <div class="stat-sublabel">Awaiting approval</div>
                                 </div>
-                                <div class="stat-item">
-                                    <div class="stat-number">15</div>
-                                    <div class="stat-label">Active Permissions</div>
+                                <div class="stat-card">
+                                    <div class="stat-number">94%</div>
+                                    <div class="stat-label">Access Health</div>
+                                </div>
+                                <div class="stat-card account-status">
+                                    <div class="status-label">Account Active</div>
+                                </div>
+                            </div>
+
+                            <!-- Middle Section - Recent Activity -->
+                            <div class="recent-activity">
+                                <h4>Recent Activity</h4>
+                                <div class="activity-list">
+                                    <div class="activity-item">
+                                        <span class="activity-text">Slack integration updated</span>
+                                        <span class="activity-time">2h ago</span>
+                                    </div>
+                                    <div class="activity-item">
+                                        <span class="activity-text">3 permissions approved</span>
+                                        <span class="activity-time">5h ago</span>
+                                    </div>
+                                    <div class="activity-item">
+                                        <span class="activity-text">Weekly review completed</span>
+                                        <span class="activity-time">1d ago</span>
+                                    </div>
+                                    <div class="activity-item">
+                                        <span class="activity-text">CRM access renewed</span>
+                                        <span class="activity-time">2d ago</span>
+                                    </div>
+                                    <div class="activity-item">
+                                        <span class="activity-text">New app connected</span>
+                                        <span class="activity-time">3d ago</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Section - Alerts -->
+                            <div class="alerts-section">
+                                <h4>Alerts</h4>
+                                <div class="alert-list">
+                                    <div class="alert-item urgent">
+                                        <div class="alert-icon">⚠️</div>
+                                        <div class="alert-content">
+                                            <div class="alert-title">Urgent: 2 expiring tomorrow</div>
+                                        </div>
+                                    </div>
+                                    <div class="alert-item warning">
+                                        <div class="alert-icon">📋</div>
+                                        <div class="alert-content">
+                                            <div class="alert-title">Review: 5 pending requests</div>
+                                        </div>
+                                    </div>
+                                    <div class="alert-item info">
+                                        <div class="alert-icon">🔒</div>
+                                        <div class="alert-content">
+                                            <div class="alert-title">Info: Security review due</div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -234,13 +299,564 @@
 
             <!-- Other Page Contents (Hidden by default) -->
             <div class="page-content" id="permissionsContent" style="display: none;">
-                <h2>My Permissions</h2>
-                <p>Permission management content will be displayed here.</p>
+                <div class="permissions-header">
+                    <h2>My Permissions</h2>
+                    <div class="permissions-summary">
+                        <span class="total-permissions">9 Active Permissions</span>
+                        <span class="expiring-soon">2 Expiring Soon</span>
+                    </div>
+                </div>
+
+                <div class="permissions-grid">
+                    <!-- PaymentApp Pro -->
+                    <div class="permission-card active">
+                        <div class="permission-header">
+                            <div class="institution-info">
+                                <div class="institution-logo payment">PAY</div>
+                                <div class="institution-details">
+                                    <h3>PaymentApp Pro</h3>
+                                    <div class="verification-badge">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Verified</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="permission-status active">Active</div>
+                        </div>
+                        
+                        <div class="permission-details">
+                            <div class="permission-type">
+                                <i class="fas fa-credit-card"></i>
+                                <span>Transaction History & Balance</span>
+                            </div>
+                            <div class="permission-duration">
+                                <span>01.08.2025 - 01.08.2026</span>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-actions">
+                            <button class="btn-manage">Manage Access</button>
+                            <button class="btn-revoke">Revoke</button>
+                        </div>
+                    </div>
+
+                    <!-- BudgetTracker -->
+                    <div class="permission-card active">
+                        <div class="permission-header">
+                            <div class="institution-info">
+                                <div class="institution-logo budget">BT</div>
+                                <div class="institution-details">
+                                    <h3>BudgetTracker</h3>
+                                    <div class="verification-badge">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Verified</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="permission-status expiring">Expiring Soon</div>
+                        </div>
+                        
+                        <div class="permission-details">
+                            <div class="permission-type">
+                                <i class="fas fa-chart-pie"></i>
+                                <span>Account Balance & Categories</span>
+                            </div>
+                            <div class="permission-duration">
+                                <span>15.06.2025 - 25.10.2025</span>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-actions">
+                            <button class="btn-renew">Renew Access</button>
+                            <button class="btn-revoke">Revoke</button>
+                        </div>
+                    </div>
+
+                    <!-- Tax Service -->
+                    <div class="permission-card active">
+                        <div class="permission-header">
+                            <div class="institution-info">
+                                <div class="institution-logo tax">TAX</div>
+                                <div class="institution-details">
+                                    <h3>TaxService Digital</h3>
+                                    <div class="verification-badge">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Verified</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="permission-status active">Active</div>
+                        </div>
+                        
+                        <div class="permission-details">
+                            <div class="permission-type">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                                <span>Annual Statements & Tax Documents</span>
+                            </div>
+                            <div class="permission-duration">
+                                <span>01.01.2025 - 31.12.2025</span>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-actions">
+                            <button class="btn-manage">Manage Access</button>
+                            <button class="btn-revoke">Revoke</button>
+                        </div>
+                    </div>
+
+                    <!-- Insurance Portal -->
+                    <div class="permission-card active">
+                        <div class="permission-header">
+                            <div class="institution-info">
+                                <div class="institution-logo insurance">INS</div>
+                                <div class="institution-details">
+                                    <h3>Insurance Portal</h3>
+                                    <div class="verification-badge">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Verified</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="permission-status expiring">Expiring Soon</div>
+                        </div>
+                        
+                        <div class="permission-details">
+                            <div class="permission-type">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Policy Information & Claims</span>
+                            </div>
+                            <div class="permission-duration">
+                                <span>10.05.2025 - 28.10.2025</span>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-actions">
+                            <button class="btn-renew">Renew Access</button>
+                            <button class="btn-revoke">Revoke</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="page-content" id="requestsContent" style="display: none;">
-                <h2>Access Requests</h2>
-                <p>Access requests content will be displayed here.</p>
+                <div class="requests-header">
+                    <h2>Access Requests</h2>
+                    <div class="requests-summary">
+                        <span class="pending-requests">3 Pending Requests</span>
+                        <span class="awaiting-review">Awaiting Your Review</span>
+                    </div>
+                </div>
+
+                <!-- Request Tabs -->
+                <div class="request-tabs">
+                    <button class="tab-btn active" data-tab="pending">
+                        <i class="fas fa-inbox"></i>
+                        Pending (3)
+                    </button>
+                    <button class="tab-btn" data-tab="spam">
+                        <i class="fas fa-shield-alt"></i>
+                        Spam (2)
+                    </button>
+                </div>
+
+                <!-- Pending Requests Tab --> 
+                <div class="tab-content active" id="pending-tab">
+                    <div class="requests-grid">
+                    <!-- Deutsche Rentenversicherung -->
+                    <div class="permission-card request">
+                        <div class="permission-header">
+                            <div class="institution-info">
+                                <div class="institution-logo drv">DRV</div>
+                                <div class="institution-details">
+                                    <h3>Deutsche Rentenversicherung</h3>
+                                    <div class="verification-badge">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Verified</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="request-badge new">New Request</div>
+                            <button class="btn-info" onclick="showRequestInfo('drv')">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="permission-details">
+                            <div class="permission-type">
+                                <i class="fas fa-chart-line"></i>
+                                <span>Möchte Ihr Depot einsehen</span>
+                            </div>
+                            <div class="permission-duration">
+                                <span>Requested: 14.10.2025</span>
+                                <span>Duration: 1 year</span>
+                            </div>
+                            <div class="request-details">
+                                <p>Deutsche Rentenversicherung is requesting access to view your investment portfolio for pension calculation purposes.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-actions">
+                            <button class="btn-approve">Zugriff gewähren</button>
+                            <button class="btn-decline">Ablehnen</button>
+                        </div>
+                    </div>
+
+                    <!-- Investment Advisor -->
+                    <div class="permission-card request">
+                        <div class="permission-header">
+                            <div class="institution-info">
+                                <div class="institution-logo invest">INV</div>
+                                <div class="institution-details">
+                                    <h3>Investment Advisor Pro</h3>
+                                    <div class="verification-badge">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Verified</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="request-badge">Pending</div>
+                            <button class="btn-info" onclick="showRequestInfo('investment')">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="permission-details">
+                            <div class="permission-type">
+                                <i class="fas fa-chart-area"></i>
+                                <span>Portfolio Overview & Performance</span>
+                            </div>
+                            <div class="permission-duration">
+                                <span>Requested: 20.09.2025</span>
+                                <span>Duration: 1 year</span>
+                            </div>
+                            <div class="request-details">
+                                <p>Investment Advisor Pro wants to analyze your portfolio performance and provide personalized investment recommendations.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-actions">
+                            <button class="btn-approve">Grant Access</button>
+                            <button class="btn-decline">Decline</button>
+                        </div>
+                    </div>
+
+                    <!-- Crypto Portfolio Tracker -->
+                    <div class="permission-card request">
+                        <div class="permission-header">
+                            <div class="institution-info">
+                                <div class="institution-logo crypto">CRY</div>
+                                <div class="institution-details">
+                                    <h3>Crypto Portfolio Tracker</h3>
+                                    <div class="verification-badge">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Verified</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="request-badge">Pending</div>
+                            <button class="btn-info" onclick="showRequestInfo('crypto')">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="permission-details">
+                            <div class="permission-type">
+                                <i class="fas fa-coins"></i>
+                                <span>Cryptocurrency Holdings & Transactions</span>
+                            </div>
+                            <div class="permission-duration">
+                                <span>Requested: 18.10.2025</span>
+                                <span>Duration: 6 months</span>
+                            </div>
+                            <div class="request-details">
+                                <p>Crypto Portfolio Tracker requests access to your cryptocurrency transactions for comprehensive portfolio analysis.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-actions">
+                            <button class="btn-approve">Grant Access</button>
+                            <button class="btn-decline">Decline</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Spam Requests Tab -->
+                <div class="tab-content" id="spam-tab">
+                    <div class="spam-info">
+                        <div class="spam-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>These requests are from unverified sources and have been automatically flagged as potential spam.</span>
+                        </div>
+                    </div>
+                    
+                    <div class="requests-grid">
+                        <!-- Fake Investment Platform -->
+                        <div class="permission-card request spam">
+                            <div class="permission-header">
+                                <div class="institution-info">
+                                    <div class="institution-logo suspicious">SUS</div>
+                                    <div class="institution-details">
+                                        <h3>QuickRich Investment</h3>
+                                        <div class="verification-badge unverified">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                            <span>Unverified</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="request-badge spam">Spam</div>
+                                <button class="btn-info" onclick="showRequestInfo('quickrich')">
+                                    <i class="fas fa-info-circle"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="permission-details">
+                                <div class="permission-type">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    <span>Complete Financial Profile & Investment History</span>
+                                </div>
+                                <div class="permission-duration">
+                                    <span>Requested: 19.10.2025</span>
+                                    <span>Duration: Indefinite</span>
+                                </div>
+                                <div class="spam-flags">
+                                    <div class="flag-item">⚠️ Unverified domain</div>
+                                    <div class="flag-item">⚠️ Suspicious request pattern</div>
+                                    <div class="flag-item">⚠️ Excessive permissions requested</div>
+                                </div>
+                            </div>
+                            
+                            <div class="permission-actions">
+                                <button class="btn-approve">Allow Request</button>
+                                <button class="btn-block">Block Permanently</button>
+                            </div>
+                        </div>
+
+                        <!-- Crypto Mining Service -->
+                        <div class="permission-card request spam">
+                            <div class="permission-header">
+                                <div class="institution-info">
+                                    <div class="institution-logo crypto-fake">MIN</div>
+                                    <div class="institution-details">
+                                        <h3>CryptoMiner Express</h3>
+                                        <div class="verification-badge unverified">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                            <span>Unverified</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="request-badge spam">Spam</div>
+                            </div>
+                            
+                            <div class="permission-details">
+                                <div class="permission-type">
+                                    <i class="fas fa-coins"></i>
+                                    <span>Account Access & Transaction Authorization</span>
+                                </div>
+                                <div class="permission-duration">
+                                    <span>Requested: 21.10.2025</span>
+                                    <span>Duration: Permanent</span>
+                                </div>
+                                <div class="spam-flags">
+                                    <div class="flag-item">⚠️ No business license found</div>
+                                    <div class="flag-item">⚠️ Requesting transaction authorization</div>
+                                    <div class="flag-item">⚠️ Recent domain registration</div>
+                                </div>
+                            </div>
+                            
+                            <div class="permission-actions">
+                                <button class="btn-approve">Allow Request</button>
+                                <button class="btn-block">Block Permanently</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-content" id="revokedContent" style="display: none;">
+                <div class="revoked-header">
+                    <h2>Revoked Access</h2>
+                    <div class="revoked-summary">
+                        <span class="total-revoked">5 Revoked Permissions</span>
+                        <span class="denied-requests">2 Denied Requests</span>
+                    </div>
+                </div>
+
+                <div class="revoked-grid">
+                    <!-- Loan Application Service (Denied) -->
+                    <div class="permission-card revoked denied">
+                        <div class="permission-header">
+                            <div class="institution-info">
+                                <div class="institution-logo loan">LOA</div>
+                                <div class="institution-details">
+                                    <h3>Loan Application Service</h3>
+                                    <div class="verification-badge">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Verified</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="revoked-status denied">Denied</div>
+                        </div>
+                        
+                        <div class="permission-details">
+                            <div class="permission-type">
+                                <i class="fas fa-money-check-alt"></i>
+                                <span>Complete Financial History & Credit Score</span>
+                            </div>
+                            <div class="revoked-info">
+                                <div class="revoked-date">
+                                    <span>Requested: 15.10.2025</span>
+                                    <span>Denied: 16.10.2025</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-actions">
+                            <button class="btn-review">Review Decision</button>
+                            <button class="btn-allow">Allow Request</button>
+                        </div>
+                    </div>
+
+                    <!-- Marketing Analytics (Revoked) -->
+                    <div class="permission-card revoked">
+                        <div class="permission-header">
+                            <div class="institution-info">
+                                <div class="institution-logo marketing">MAR</div>
+                                <div class="institution-details">
+                                    <h3>Marketing Analytics Pro</h3>
+                                    <div class="verification-badge">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Verified</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="revoked-status revoked">Revoked</div>
+                        </div>
+                        
+                        <div class="permission-details">
+                            <div class="permission-type">
+                                <i class="fas fa-chart-bar"></i>
+                                <span>Transaction Categories & Spending Patterns</span>
+                            </div>
+                            <div class="revoked-info">
+                                <div class="revoked-date">
+                                    <span>Active: 01.03.2025 - 20.10.2025</span>
+                                    <span>Revoked: 20.10.2025</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-actions">
+                            <button class="btn-review">View History</button>
+                            <button class="btn-restore">Restore Access</button>
+                        </div>
+                    </div>
+
+                    <!-- Social Media Aggregator (Denied) -->
+                    <div class="permission-card revoked denied">
+                        <div class="permission-header">
+                            <div class="institution-info">
+                                <div class="institution-logo social">SOC</div>
+                                <div class="institution-details">
+                                    <h3>Social Media Aggregator</h3>
+                                    <div class="verification-badge">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        <span>Unverified</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="revoked-status denied">Denied</div>
+                        </div>
+                        
+                        <div class="permission-details">
+                            <div class="permission-type">
+                                <i class="fas fa-share-alt"></i>
+                                <span>Account Balance & Transaction History</span>
+                            </div>
+                            <div class="revoked-info">
+                                <div class="revoked-date">
+                                    <span>Requested: 12.10.2025</span>
+                                    <span>Denied: 12.10.2025</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-actions">
+                            <button class="btn-review">Review Decision</button>
+                            <button class="btn-block">Block Permanently</button>
+                        </div>
+                    </div>
+
+                    <!-- Old Banking App (Revoked) -->
+                    <div class="permission-card revoked">
+                        <div class="permission-header">
+                            <div class="institution-info">
+                                <div class="institution-logo oldbank">OLD</div>
+                                <div class="institution-details">
+                                    <h3>Old Banking App</h3>
+                                    <div class="verification-badge">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Verified</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="revoked-status revoked">Revoked</div>
+                        </div>
+                        
+                        <div class="permission-details">
+                            <div class="permission-type">
+                                <i class="fas fa-university"></i>
+                                <span>Full Account Access & Transaction Management</span>
+                            </div>
+                            <div class="revoked-info">
+                                <div class="revoked-date">
+                                    <span>Active: 01.01.2024 - 15.09.2025</span>
+                                    <span>Revoked: 15.09.2025</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-actions">
+                            <button class="btn-review">View History</button>
+                            <button class="btn-delete">Delete Record</button>
+                        </div>
+                    </div>
+
+                    <!-- Gaming Platform (Revoked) -->
+                    <div class="permission-card revoked">
+                        <div class="permission-header">
+                            <div class="institution-info">
+                                <div class="institution-logo gaming">GAM</div>
+                                <div class="institution-details">
+                                    <h3>Gaming Platform Pay</h3>
+                                    <div class="verification-badge">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Verified</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="revoked-status revoked">Revoked</div>
+                        </div>
+                        
+                        <div class="permission-details">
+                            <div class="permission-type">
+                                <i class="fas fa-gamepad"></i>
+                                <span>Payment Processing & Balance Check</span>
+                            </div>
+                            <div class="revoked-info">
+                                <div class="revoked-date">
+                                    <span>Active: 10.08.2025 - 18.10.2025</span>
+                                    <span>Revoked: 18.10.2025</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-actions">
+                            <button class="btn-review">View History</button>
+                            <button class="btn-restore">Restore Access</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="page-content" id="appsContent" style="display: none;">
@@ -257,7 +873,243 @@
                 <h2>Settings</h2>
                 <p>Settings content will be displayed here.</p>
             </div>
+
+            <div class="page-content" id="requestAccessContent" style="display: none;">
+                <div class="page-header">
+                    <h2>Request Access</h2>
+                    <p>Browse available institutions and request access to their services</p>
+                </div>
+
+                <div class="institutions-grid">
+                    <!-- PaymentApp Pro -->
+                    <div class="institution-card">
+                        <div class="institution-header">
+                            <div class="institution-logo paymentapp">PAY</div>
+                            <div class="institution-info">
+                                <h3>PaymentApp Pro</h3>
+                                <div class="institution-status">
+                                    <i class="fas fa-check-circle verified"></i>
+                                    <span>Verified Financial Service</span>
+                                </div>
+                            </div>
+                            <button class="btn-request" onclick="requestAccess('paymentapp')">
+                                <i class="fas fa-plus"></i>
+                                Request Access
+                            </button>
+                        </div>
+                        
+                        <div class="permissions-granted">
+                            <h4>Current Permissions:</h4>
+                            <div class="permission-list">
+                                <div class="permission-item granted">
+                                    <i class="fas fa-credit-card"></i>
+                                    <span>Payment Processing</span>
+                                    <div class="permission-status">Active</div>
+                                </div>
+                                <div class="permission-item granted">
+                                    <i class="fas fa-history"></i>
+                                    <span>Transaction History</span>
+                                    <div class="permission-status">Active</div>
+                                </div>
+                                <div class="permission-item granted">
+                                    <i class="fas fa-chart-line"></i>
+                                    <span>Spending Analytics</span>
+                                    <div class="permission-status">Active</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BudgetTracker -->
+                    <div class="institution-card">
+                        <div class="institution-header">
+                            <div class="institution-logo budgettracker">BUD</div>
+                            <div class="institution-info">
+                                <h3>BudgetTracker</h3>
+                                <div class="institution-status">
+                                    <i class="fas fa-check-circle verified"></i>
+                                    <span>Verified Budget Management</span>
+                                </div>
+                            </div>
+                            <button class="btn-request" onclick="requestAccess('budgettracker')">
+                                <i class="fas fa-plus"></i>
+                                Request Access
+                            </button>
+                        </div>
+                        
+                        <div class="permissions-granted">
+                            <h4>Current Permissions:</h4>
+                            <div class="permission-list">
+                                <div class="permission-item granted">
+                                    <i class="fas fa-wallet"></i>
+                                    <span>Account Balance</span>
+                                    <div class="permission-status">Active</div>
+                                </div>
+                                <div class="permission-item granted">
+                                    <i class="fas fa-chart-pie"></i>
+                                    <span>Spending Categories</span>
+                                    <div class="permission-status">Active</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ExpenseManager -->
+                    <div class="institution-card">
+                        <div class="institution-header">
+                            <div class="institution-logo expensemanager">EXP</div>
+                            <div class="institution-info">
+                                <h3>ExpenseManager</h3>
+                                <div class="institution-status">
+                                    <i class="fas fa-check-circle verified"></i>
+                                    <span>Verified Expense Tracking</span>
+                                </div>
+                            </div>
+                            <button class="btn-request" onclick="requestAccess('expensemanager')">
+                                <i class="fas fa-plus"></i>
+                                Request Access
+                            </button>
+                        </div>
+                        
+                        <div class="permissions-granted">
+                            <h4>Current Permissions:</h4>
+                            <div class="permission-list">
+                                <div class="permission-item granted">
+                                    <i class="fas fa-receipt"></i>
+                                    <span>Transaction Data</span>
+                                    <div class="permission-status">Active</div>
+                                </div>
+                                <div class="permission-item pending">
+                                    <i class="fas fa-camera"></i>
+                                    <span>Receipt Scanning</span>
+                                    <div class="permission-status">Pending</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- InvestmentTracker -->
+                    <div class="institution-card">
+                        <div class="institution-header">
+                            <div class="institution-logo investmenttracker">INV</div>
+                            <div class="institution-info">
+                                <h3>InvestmentTracker</h3>
+                                <div class="institution-status">
+                                    <i class="fas fa-check-circle verified"></i>
+                                    <span>Verified Investment Platform</span>
+                                </div>
+                            </div>
+                            <button class="btn-request" onclick="requestAccess('investmenttracker')">
+                                <i class="fas fa-plus"></i>
+                                Request Access
+                            </button>
+                        </div>
+                        
+                        <div class="permissions-granted">
+                            <h4>Current Permissions:</h4>
+                            <div class="permission-list">
+                                <div class="permission-item granted">
+                                    <i class="fas fa-chart-area"></i>
+                                    <span>Portfolio Overview</span>
+                                    <div class="permission-status">Active</div>
+                                </div>
+                                <div class="permission-item granted">
+                                    <i class="fas fa-coins"></i>
+                                    <span>Investment Holdings</span>
+                                    <div class="permission-status">Active</div>
+                                </div>
+                                <div class="permission-item granted">
+                                    <i class="fas fa-trophy"></i>
+                                    <span>Performance Metrics</span>
+                                    <div class="permission-status">Active</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TaxHelper -->
+                    <div class="institution-card">
+                        <div class="institution-header">
+                            <div class="institution-logo taxhelper">TAX</div>
+                            <div class="institution-info">
+                                <h3>TaxHelper</h3>
+                                <div class="institution-status">
+                                    <i class="fas fa-check-circle verified"></i>
+                                    <span>Verified Tax Service</span>
+                                </div>
+                            </div>
+                            <button class="btn-request" onclick="requestAccess('taxhelper')">
+                                <i class="fas fa-plus"></i>
+                                Request Access
+                            </button>
+                        </div>
+                        
+                        <div class="permissions-granted">
+                            <h4>Current Permissions:</h4>
+                            <div class="permission-list">
+                                <div class="permission-item denied">
+                                    <i class="fas fa-file-invoice-dollar"></i>
+                                    <span>Tax Document Access</span>
+                                    <div class="permission-status">Denied</div>
+                                </div>
+                                <div class="permission-item available">
+                                    <i class="fas fa-calculator"></i>
+                                    <span>Tax Calculation</span>
+                                    <div class="permission-status">Available</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CreditMonitor -->
+                    <div class="institution-card">
+                        <div class="institution-header">
+                            <div class="institution-logo creditmonitor">CRE</div>
+                            <div class="institution-info">
+                                <h3>CreditMonitor</h3>
+                                <div class="institution-status">
+                                    <i class="fas fa-check-circle verified"></i>
+                                    <span>Verified Credit Service</span>
+                                </div>
+                            </div>
+                            <button class="btn-request" onclick="requestAccess('creditmonitor')">
+                                <i class="fas fa-plus"></i>
+                                Request Access
+                            </button>
+                        </div>
+                        
+                        <div class="permissions-granted">
+                            <h4>Current Permissions:</h4>
+                            <div class="permission-list">
+                                <div class="permission-item granted">
+                                    <i class="fas fa-credit-card"></i>
+                                    <span>Credit Score Monitoring</span>
+                                    <div class="permission-status">Active</div>
+                                </div>
+                                <div class="permission-item available">
+                                    <i class="fas fa-bell"></i>
+                                    <span>Alert Notifications</span>
+                                    <div class="permission-status">Available</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
+    </div>
+
+    <!-- Info Modal -->
+    <div id="infoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Request Information</h3>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>

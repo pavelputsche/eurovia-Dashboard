@@ -7,6 +7,11 @@ const pageTitle = document.querySelector('.page-title');
 const dashboardContent = document.getElementById('dashboardContent');
 const pageContents = document.querySelectorAll('.page-content');
 
+// Debug: Log what pageContents includes
+console.log('pageContents found:', Array.from(pageContents).map(el => el.id));
+console.log('quickActionBtns found:', quickActionBtns.length);
+console.log('navItems found:', navItems.length);
+
 // Mobile menu toggle
 menuToggle.addEventListener('click', () => {
     sidebar.classList.toggle('active');
@@ -26,6 +31,12 @@ navItems.forEach(item => {
     item.addEventListener('click', (e) => {
         e.preventDefault();
         
+        // Don't interfere if a Quick Action is active
+        if (window.quickActionActive) {
+            console.log('Sidebar navigation blocked - Quick Action active');
+            return;
+        }
+        
         // Remove active class from all nav items
         navItems.forEach(nav => nav.classList.remove('active'));
         
@@ -40,6 +51,7 @@ navItems.forEach(item => {
             'dashboard': 'Dashboard',
             'permissions': 'My Permissions',
             'requests': 'Access Requests',
+            'revoked': 'Revoked Access',
             'apps': 'Connected Apps',
             'activity': 'Activity Log',
             'settings': 'Settings'
@@ -50,14 +62,38 @@ navItems.forEach(item => {
         // Show/hide content based on selected page
         if (page === 'dashboard') {
             dashboardContent.style.display = 'flex';
-            pageContents.forEach(content => content.style.display = 'none');
+            pageContents.forEach(content => {
+                content.style.display = 'none';
+                content.classList.remove('show');
+            });
         } else {
             dashboardContent.style.display = 'none';
-            pageContents.forEach(content => content.style.display = 'none');
+            pageContents.forEach(content => {
+                content.style.display = 'none';
+                content.classList.remove('show');
+            });
+            
+            // Specifically hide the Request Access content when navigating via sidebar
+            const requestAccessContent = document.getElementById('requestAccessContent');
+            if (requestAccessContent && !requestAccessContent.hasAttribute('data-quick-action-active')) {
+                requestAccessContent.style.display = 'none';
+                requestAccessContent.classList.remove('show');
+            }
             
             const targetContent = document.getElementById(`${page}Content`);
             if (targetContent) {
                 targetContent.style.display = 'block';
+                console.log(`Showing ${page}Content, hiding requestAccessContent`);
+                
+                // Special handling for requests page to ensure Request Access content is hidden
+                if (page === 'requests') {
+                    const requestAccessContent = document.getElementById('requestAccessContent');
+                    if (requestAccessContent) {
+                        requestAccessContent.style.display = 'none';
+                        requestAccessContent.classList.remove('show');
+                        console.log('Explicitly hiding requestAccessContent for requests page');
+                    }
+                }
             }
         }
         
@@ -83,8 +119,11 @@ navItems.forEach(item => {
 
 // Quick Action buttons functionality
 quickActionBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         const action = btn.getAttribute('data-action');
+        console.log('Quick Action triggered:', action);
         handleQuickAction(action);
     });
 });
@@ -93,7 +132,197 @@ quickActionBtns.forEach(btn => {
 function handleQuickAction(action) {
     const actions = {
         'request-access': () => {
-            showNotification('Request Access form would open here', 'info');
+            // Navigate to Request Access page
+            console.log('Request Access clicked');
+            pageTitle.textContent = 'Request Access';
+            
+            // Hide dashboard and all other page contents (except requestAccessContent)
+            dashboardContent.style.display = 'none';
+            pageContents.forEach(content => {
+                if (content.id !== 'requestAccessContent') {
+                    content.style.display = 'none';
+                    content.classList.remove('show');
+                    console.log('Hiding content:', content.id);
+                }
+            });
+            
+            // Specifically hide the Access Requests content (requestsContent)
+            const requestsContent = document.getElementById('requestsContent');
+            if (requestsContent) {
+                requestsContent.style.display = 'none';
+                console.log('Hiding requestsContent');
+            }
+            
+            // Remove any existing test elements
+            const existingTest = document.getElementById('workingRequestAccess');
+            if (existingTest) {
+                existingTest.remove();
+            }
+            
+            // Create the working version with proper styling
+            const workingElement = document.createElement('div');
+            workingElement.id = 'workingRequestAccess';
+            workingElement.innerHTML = `
+                <div style="padding: 30px; background: #f8f9fa; min-height: 100vh;">
+                    <div style="margin-bottom: 30px;">
+                        <h2 style="color: #2c3e50; margin-bottom: 10px; font-size: 2rem;">Request Access</h2>
+                        <p style="color: #6c757d; font-size: 1.1rem;">Browse available institutions and request access to their services</p>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 25px; margin-top: 25px;">
+                        <!-- PaymentApp Pro -->
+                        <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); border: 1px solid #e9ecef; transition: all 0.3s ease;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #28a745, #20c997); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px;">PAY</div>
+                                    <div>
+                                        <h3 style="color: #2c3e50; margin: 0 0 5px 0; font-size: 1.3rem;">PaymentApp Pro</h3>
+                                        <div style="display: flex; align-items: center; gap: 5px; color: #28a745; font-size: 0.9rem;">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>Verified Financial Service</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button style="background: linear-gradient(135deg, #007bff, #0056b3); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.3s ease;">
+                                    <i class="fas fa-plus"></i>
+                                    Request Access
+                                </button>
+                            </div>
+                            
+                            <div>
+                                <h4 style="color: #495057; margin: 0 0 15px 0; font-size: 1rem;">Current Permissions:</h4>
+                                <div style="display: flex; flex-direction: column; gap: 10px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #d4edda; border-radius: 8px; border-left: 4px solid #28a745;">
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <i class="fas fa-credit-card" style="color: #155724;"></i>
+                                            <span style="color: #155724; font-weight: 500;">Payment Processing</span>
+                                        </div>
+                                        <div style="background: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 500;">Active</div>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #d4edda; border-radius: 8px; border-left: 4px solid #28a745;">
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <i class="fas fa-history" style="color: #155724;"></i>
+                                            <span style="color: #155724; font-weight: 500;">Transaction History</span>
+                                        </div>
+                                        <div style="background: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 500;">Active</div>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #d4edda; border-radius: 8px; border-left: 4px solid #28a745;">
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <i class="fas fa-chart-line" style="color: #155724;"></i>
+                                            <span style="color: #155724; font-weight: 500;">Spending Analytics</span>
+                                        </div>
+                                        <div style="background: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 500;">Active</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- BudgetTracker -->
+                        <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); border: 1px solid #e9ecef; transition: all 0.3s ease;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #007bff, #0056b3); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px;">BUD</div>
+                                    <div>
+                                        <h3 style="color: #2c3e50; margin: 0 0 5px 0; font-size: 1.3rem;">BudgetTracker</h3>
+                                        <div style="display: flex; align-items: center; gap: 5px; color: #28a745; font-size: 0.9rem;">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>Verified Budget Management</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button style="background: linear-gradient(135deg, #007bff, #0056b3); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.3s ease;">
+                                    <i class="fas fa-plus"></i>
+                                    Request Access
+                                </button>
+                            </div>
+                            
+                            <div>
+                                <h4 style="color: #495057; margin: 0 0 15px 0; font-size: 1rem;">Current Permissions:</h4>
+                                <div style="display: flex; flex-direction: column; gap: 10px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #d4edda; border-radius: 8px; border-left: 4px solid #28a745;">
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <i class="fas fa-wallet" style="color: #155724;"></i>
+                                            <span style="color: #155724; font-weight: 500;">Account Balance</span>
+                                        </div>
+                                        <div style="background: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 500;">Active</div>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #d4edda; border-radius: 8px; border-left: 4px solid #28a745;">
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <i class="fas fa-chart-pie" style="color: #155724;"></i>
+                                            <span style="color: #155724; font-weight: 500;">Spending Categories</span>
+                                        </div>
+                                        <div style="background: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 500;">Active</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ExpenseManager -->
+                        <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); border: 1px solid #e9ecef; transition: all 0.3s ease;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #fd7e14, #e55a4f); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px;">EXP</div>
+                                    <div>
+                                        <h3 style="color: #2c3e50; margin: 0 0 5px 0; font-size: 1.3rem;">ExpenseManager</h3>
+                                        <div style="display: flex; align-items: center; gap: 5px; color: #28a745; font-size: 0.9rem;">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>Verified Expense Tracking</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button style="background: linear-gradient(135deg, #007bff, #0056b3); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.3s ease;">
+                                    <i class="fas fa-plus"></i>
+                                    Request Access
+                                </button>
+                            </div>
+                            
+                            <div>
+                                <h4 style="color: #495057; margin: 0 0 15px 0; font-size: 1rem;">Current Permissions:</h4>
+                                <div style="display: flex; flex-direction: column; gap: 10px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #d4edda; border-radius: 8px; border-left: 4px solid #28a745;">
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <i class="fas fa-database" style="color: #155724;"></i>
+                                            <span style="color: #155724; font-weight: 500;">Transaction Data</span>
+                                        </div>
+                                        <div style="background: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 500;">Active</div>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;">
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <i class="fas fa-receipt" style="color: #856404;"></i>
+                                            <span style="color: #856404; font-weight: 500;">Receipt Scanning</span>
+                                        </div>
+                                        <div style="background: #ffc107; color: #212529; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 500;">Pending</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            workingElement.style.cssText = `
+                position: relative;
+                width: 100%;
+                height: auto;
+                background: white;
+                z-index: 100;
+                display: block;
+                visibility: visible;
+                opacity: 1;
+            `;
+            
+            // Find the main content area and append our working element
+            const mainContent = document.querySelector('.main-content') || document.querySelector('.content') || document.body;
+            mainContent.appendChild(workingElement);
+            
+            console.log('Created working Request Access page');
+            console.log('Working element offsetHeight:', workingElement.offsetHeight);
+            console.log('Working element offsetWidth:', workingElement.offsetWidth);
+            
+            // Remove active class from all nav items (since this is a Quick Action, not sidebar nav)
+            navItems.forEach(nav => nav.classList.remove('active'));
+            
+            showNotification('Browse available institutions and request access', 'info');
         },
         'renew-permissions': () => {
             showNotification('Renewing permissions...', 'success');
@@ -302,7 +531,302 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 150);
         });
     });
+    
+    // Initialize permission cards functionality
+    initializePermissionCards();
+    
+    // Initialize request tabs
+    initializeRequestTabs();
 });
+
+// Permission Cards Functionality
+function initializePermissionCards() {
+    // Handle permission action buttons
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('btn-approve')) {
+            handlePermissionAction('approve', e.target);
+        } else if (e.target.classList.contains('btn-decline')) {
+            handlePermissionAction('decline', e.target);
+        } else if (e.target.classList.contains('btn-manage')) {
+            handlePermissionAction('manage', e.target);
+        } else if (e.target.classList.contains('btn-revoke')) {
+            handlePermissionAction('revoke', e.target);
+        } else if (e.target.classList.contains('btn-renew')) {
+            handlePermissionAction('renew', e.target);
+        } else if (e.target.classList.contains('menu-btn')) {
+            handleMenuClick(e.target);
+        } else if (e.target.classList.contains('btn-review')) {
+            handleRevokedAction('review', e.target);
+        } else if (e.target.classList.contains('btn-allow')) {
+            handleRevokedAction('allow', e.target);
+        } else if (e.target.classList.contains('btn-restore')) {
+            handleRevokedAction('restore', e.target);
+        } else if (e.target.classList.contains('btn-block')) {
+            handleRevokedAction('block', e.target);
+        } else if (e.target.classList.contains('btn-delete')) {
+            handleRevokedAction('delete', e.target);
+        } else if (e.target.classList.contains('btn-unblock')) {
+            handleRevokedAction('unblock', e.target);
+        }
+    });
+    
+    // Add animation to permission cards
+    const permissionCards = document.querySelectorAll('.permission-card');
+    permissionCards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 100);
+    });
+}
+
+function handlePermissionAction(action, button) {
+    const card = button.closest('.permission-card');
+    const institutionName = card.querySelector('.institution-details h3').textContent;
+    
+    switch (action) {
+        case 'approve':
+            if (confirm(`Grant access to ${institutionName}?`)) {
+                showNotification(`Access granted to ${institutionName}`, 'success');
+                // Update card to active state
+                card.classList.add('active');
+                const header = card.querySelector('.permission-header');
+                const actionsDiv = card.querySelector('.permission-actions');
+                
+                // Replace menu button with status
+                const menuDiv = header.querySelector('.permission-menu');
+                if (menuDiv) {
+                    menuDiv.innerHTML = '<div class="permission-status active">Active</div>';
+                }
+                
+                // Update action buttons
+                actionsDiv.innerHTML = `
+                    <button class="btn-manage">Manage Access</button>
+                    <button class="btn-revoke">Revoke</button>
+                `;
+            }
+            break;
+            
+        case 'decline':
+            if (confirm(`Decline access request from ${institutionName}?`)) {
+                showNotification(`Access request declined for ${institutionName}`, 'warning');
+                // Remove the card with animation
+                card.style.transform = 'translateX(-100%)';
+                card.style.opacity = '0';
+                setTimeout(() => {
+                    card.remove();
+                }, 300);
+            }
+            break;
+            
+        case 'manage':
+            showNotification(`Opening permission management for ${institutionName}`, 'info');
+            break;
+            
+        case 'revoke':
+            if (confirm(`Are you sure you want to revoke access for ${institutionName}? This action cannot be undone.`)) {
+                showNotification(`Access revoked for ${institutionName}`, 'warning');
+                // Remove active class and update UI
+                card.classList.remove('active');
+                card.style.transform = 'translateX(-100%)';
+                card.style.opacity = '0';
+                setTimeout(() => {
+                    card.remove();
+                }, 300);
+            }
+            break;
+            
+        case 'renew':
+            if (confirm(`Renew access for ${institutionName} for another year?`)) {
+                showNotification(`Access renewed for ${institutionName}`, 'success');
+                // Update status and duration
+                const statusElement = card.querySelector('.permission-status');
+                if (statusElement) {
+                    statusElement.className = 'permission-status active';
+                    statusElement.textContent = 'Active';
+                }
+                
+                // Update duration (add one year)
+                const durationElement = card.querySelector('.permission-duration span');
+                if (durationElement) {
+                    const currentDate = new Date();
+                    const nextYear = new Date(currentDate.getFullYear() + 1, currentDate.getMonth(), currentDate.getDate());
+                    const formattedDate = nextYear.toLocaleDateString('de-DE');
+                    durationElement.textContent = `${new Date().toLocaleDateString('de-DE')} - ${formattedDate}`;
+                }
+                
+                // Update action buttons
+                const actionsDiv = card.querySelector('.permission-actions');
+                actionsDiv.innerHTML = `
+                    <button class="btn-manage">Manage Access</button>
+                    <button class="btn-revoke">Revoke</button>
+                `;
+            }
+            break;
+    }
+}
+
+function handleRevokedAction(action, button) {
+    const card = button.closest('.permission-card');
+    const institutionName = card.querySelector('.institution-details h3').textContent;
+    
+    switch (action) {
+        case 'review':
+            showNotification(`Opening detailed review for ${institutionName}`, 'info');
+            break;
+            
+        case 'allow':
+            if (confirm(`Allow the request from ${institutionName}? This will grant them the requested permissions.`)) {
+                showNotification(`Request approved for ${institutionName}`, 'success');
+                // Remove the card and potentially move to active permissions
+                card.style.transform = 'translateX(100%)';
+                card.style.opacity = '0';
+                setTimeout(() => {
+                    card.remove();
+                }, 300);
+            }
+            break;
+            
+        case 'restore':
+            if (confirm(`Restore access for ${institutionName}? This will reactivate their permissions.`)) {
+                showNotification(`Access restored for ${institutionName}`, 'success');
+                // Remove the card from revoked list
+                card.style.transform = 'translateX(100%)';
+                card.style.opacity = '0';
+                setTimeout(() => {
+                    card.remove();
+                }, 300);
+            }
+            break;
+            
+        case 'block':
+            if (confirm(`Permanently block ${institutionName}? They will not be able to request access again.`)) {
+                showNotification(`${institutionName} has been permanently blocked`, 'warning');
+                // Update card to show blocked status
+                const statusElement = card.querySelector('.revoked-status');
+                statusElement.className = 'revoked-status blocked';
+                statusElement.textContent = 'Blocked';
+                statusElement.style.background = '#343a40';
+                statusElement.style.color = 'white';
+                
+                // Update action buttons
+                const actionsDiv = card.querySelector('.permission-actions');
+                actionsDiv.innerHTML = `
+                    <button class="btn-review">View History</button>
+                    <button class="btn-unblock">Unblock</button>
+                `;
+            }
+            break;
+            
+        case 'delete':
+            if (confirm(`Permanently delete the record for ${institutionName}? This action cannot be undone.`)) {
+                showNotification(`Record deleted for ${institutionName}`, 'warning');
+                card.style.transform = 'scale(0)';
+                card.style.opacity = '0';
+                setTimeout(() => {
+                    card.remove();
+                }, 300);
+            }
+            break;
+            
+        case 'unblock':
+            if (confirm(`Unblock ${institutionName}? They will be able to request access again.`)) {
+                showNotification(`${institutionName} has been unblocked`, 'success');
+                // Update card back to denied status
+                const statusElement = card.querySelector('.revoked-status');
+                statusElement.className = 'revoked-status denied';
+                statusElement.textContent = 'Denied';
+                statusElement.style.background = '#f5c6cb';
+                statusElement.style.color = '#721c24';
+                
+                // Update action buttons
+                const actionsDiv = card.querySelector('.permission-actions');
+                actionsDiv.innerHTML = `
+                    <button class="btn-review">Review Decision</button>
+                    <button class="btn-allow">Allow Request</button>
+                `;
+            }
+            break;
+    }
+}
+
+function handleMenuClick(button) {
+    // Create a simple dropdown menu
+    const existingMenu = document.querySelector('.permission-dropdown');
+    if (existingMenu) {
+        existingMenu.remove();
+        return;
+    }
+    
+    const dropdown = document.createElement('div');
+    dropdown.className = 'permission-dropdown';
+    dropdown.innerHTML = `
+        <div class="dropdown-item" data-action="details">View Details</div>
+        <div class="dropdown-item" data-action="history">View History</div>
+        <div class="dropdown-item" data-action="notifications">Notification Settings</div>
+    `;
+    
+    // Position dropdown
+    const rect = button.getBoundingClientRect();
+    dropdown.style.position = 'fixed';
+    dropdown.style.top = `${rect.bottom + 5}px`;
+    dropdown.style.right = `${window.innerWidth - rect.right}px`;
+    dropdown.style.zIndex = '1000';
+    dropdown.style.background = 'white';
+    dropdown.style.border = '1px solid #e9ecef';
+    dropdown.style.borderRadius = '8px';
+    dropdown.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+    dropdown.style.minWidth = '150px';
+    
+    document.body.appendChild(dropdown);
+    
+    // Handle dropdown clicks
+    dropdown.addEventListener('click', (e) => {
+        const action = e.target.getAttribute('data-action');
+        if (action) {
+            showNotification(`${e.target.textContent} feature would open here`, 'info');
+            dropdown.remove();
+        }
+    });
+    
+    // Close dropdown when clicking outside
+    setTimeout(() => {
+        document.addEventListener('click', (e) => {
+            if (!dropdown.contains(e.target) && e.target !== button) {
+                dropdown.remove();
+            }
+        }, { once: true });
+    }, 10);
+}
+
+// Add dropdown styles
+const dropdownStyles = document.createElement('style');
+dropdownStyles.textContent = `
+    .permission-dropdown {
+        animation: fadeIn 0.2s ease;
+    }
+    
+    .dropdown-item {
+        padding: 10px 15px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        color: #333;
+        border-bottom: 1px solid #f1f3f4;
+    }
+    
+    .dropdown-item:last-child {
+        border-bottom: none;
+    }
+    
+    .dropdown-item:hover {
+        background: #f8f9fa;
+    }
+`;
+document.head.appendChild(dropdownStyles);
 
 // Handle window resize
 window.addEventListener('resize', () => {
@@ -339,5 +863,221 @@ window.addEventListener('resize', () => {
         // Handle resize logic here if needed
     }, 250);
 });
+
+// Request Tabs Functionality
+function initializeRequestTabs() {
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetTab = button.getAttribute('data-tab');
+            
+            // Remove active class from all tabs and contents
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+                content.style.display = 'none';
+            });
+            
+            // Add active class to clicked tab
+            button.classList.add('active');
+            
+            // Show corresponding content
+            const targetContent = document.getElementById(`${targetTab}-tab`);
+            console.log('Looking for tab:', `${targetTab}-tab`, 'Found:', targetContent);
+            if (targetContent) {
+                targetContent.classList.add('active');
+                targetContent.style.display = 'block';
+                console.log('Showing tab content for:', targetTab);
+                
+                // Add animation
+                targetContent.style.opacity = '0';
+                targetContent.style.transform = 'translateY(10px)';
+                
+                setTimeout(() => {
+                    targetContent.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                    targetContent.style.opacity = '1';
+                    targetContent.style.transform = 'translateY(0)';
+                }, 50);
+            }
+        });
+    });
+}
+
+// Request Info Modal Functionality
+function showRequestInfo(requestType) {
+    const modal = document.getElementById('infoModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+    
+    const requestData = {
+        drv: {
+            title: "Deutsche Rentenversicherung",
+            company: "German Pension Insurance",
+            verification: "Verified Government Entity",
+            purpose: "Pension Calculation & Management",
+            dataAccess: [
+                "Investment portfolio overview",
+                "Account balance information", 
+                "Transaction history (last 12 months)",
+                "Personal identification data"
+            ],
+            securityLevel: "High - Government Entity",
+            duration: "1 Year",
+            autoRenewal: "Manual approval required",
+            riskLevel: "Low",
+            description: "The German Pension Insurance requires access to your investment portfolio to accurately calculate your future pension benefits. This is a legitimate government request required for pension planning.",
+            moreInfoLink: "https://www.deutsche-rentenversicherung.de/DRV/DE/Home/home_node.html",
+            moreInfoText: "Visit the official Deutsche Rentenversicherung website"
+        },
+        investment: {
+            title: "Investment Advisor Pro",
+            company: "FinTech Solutions GmbH",
+            verification: "Licensed Investment Advisor",
+            purpose: "Portfolio Analysis & Investment Recommendations",
+            dataAccess: [
+                "Portfolio performance metrics",
+                "Investment allocation data",
+                "Historical transaction data",
+                "Risk tolerance profile"
+            ],
+            securityLevel: "Medium - Licensed Provider",
+            duration: "1 Year",
+            autoRenewal: "Automatic with 30-day notice",
+            riskLevel: "Medium",
+            description: "Investment Advisor Pro is a licensed financial advisor that provides personalized investment recommendations based on your portfolio performance and risk profile. They are regulated by BaFin.",
+            moreInfoLink: "https://www.bafin.de/EN/Homepage/homepage_node.html",
+            moreInfoText: "Learn more about BaFin regulation and licensed advisors"
+        },
+        crypto: {
+            title: "Crypto Portfolio Tracker",
+            company: "CryptoAnalytics Ltd",
+            verification: "Verified Cryptocurrency Service",
+            purpose: "Cryptocurrency Portfolio Management",
+            dataAccess: [
+                "Cryptocurrency transaction history",
+                "Digital wallet balances",
+                "Trading activity data",
+                "Portfolio allocation metrics"
+            ],
+            securityLevel: "Medium - Verified Service",
+            duration: "6 Months",
+            autoRenewal: "Manual approval required",
+            riskLevel: "Medium",
+            description: "Crypto Portfolio Tracker helps you monitor and analyze your cryptocurrency investments across multiple wallets and exchanges. They provide comprehensive portfolio analytics and tax reporting.",
+            moreInfoLink: "https://help.eurovia-bank.com/crypto-services",
+            moreInfoText: "View our approved cryptocurrency service providers"
+        },
+        quickrich: {
+            title: "QuickRich Investment",
+            company: "Unknown Entity",
+            verification: "⚠️ UNVERIFIED - POTENTIAL SCAM",
+            purpose: "Suspicious Financial Services",
+            dataAccess: [
+                "Complete financial profile",
+                "Investment history and holdings",
+                "Personal identification data",
+                "Account access credentials"
+            ],
+            securityLevel: "🚨 CRITICAL RISK - UNVERIFIED",
+            duration: "Indefinite",
+            autoRenewal: "Unknown terms",
+            riskLevel: "🚨 EXTREME RISK",
+            description: "⚠️ WARNING: QuickRich Investment is an unverified entity requesting extensive access to your financial data. This appears to be a fraudulent investment scheme. DO NOT APPROVE this request.",
+            moreInfoLink: "https://help.eurovia-bank.com/security/fraud-prevention",
+            moreInfoText: "Learn how to protect yourself from financial fraud"
+        }
+    };
+    
+    const data = requestData[requestType];
+    if (!data) return;
+    
+    modalTitle.textContent = data.title;
+    
+    const isSpam = requestType === 'quickrich';
+    const warningClass = isSpam ? 'danger' : '';
+    
+    modalBody.innerHTML = `
+        <div class="info-section">
+            <h4>Company Information</h4>
+            <ul class="info-list">
+                <li><strong>Organization:</strong> <span>${data.company}</span></li>
+                <li><strong>Verification Status:</strong> <span>${data.verification}</span></li>
+                <li><strong>Security Level:</strong> <span>${data.securityLevel}</span></li>
+            </ul>
+        </div>
+        
+        <div class="info-section">
+            <h4>Request Details</h4>
+            <ul class="info-list">
+                <li><strong>Purpose:</strong> <span>${data.purpose}</span></li>
+                <li><strong>Access Duration:</strong> <span>${data.duration}</span></li>
+                <li><strong>Auto-Renewal:</strong> <span>${data.autoRenewal}</span></li>
+                <li><strong>Risk Level:</strong> <span>${data.riskLevel}</span></li>
+            </ul>
+        </div>
+        
+        <div class="info-section">
+            <h4>Data Access Requested</h4>
+            <ul class="info-list">
+                ${data.dataAccess.map(item => `<li>• ${item}</li>`).join('')}
+            </ul>
+        </div>
+        
+        <div class="security-warning ${warningClass}">
+            <strong>${isSpam ? '🚨 SECURITY ALERT' : 'ℹ️ Information'}:</strong><br>
+            ${data.description}
+        </div>
+        
+        <div class="more-info-section">
+            <p><strong>For more information:</strong></p>
+            <a href="${data.moreInfoLink}" target="_blank" class="more-info-link">
+                <i class="fas fa-external-link-alt"></i>
+                ${data.moreInfoText}
+            </a>
+        </div>
+    `;
+    
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+    const modal = document.getElementById('infoModal');
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const modal = document.getElementById('infoModal');
+    if (event.target === modal) {
+        closeModal();
+    }
+}
+
+// Request Access functionality
+function requestAccess(institutionId) {
+    const institutions = {
+        'paymentapp': 'PaymentApp Pro',
+        'budgettracker': 'BudgetTracker',
+        'expensemanager': 'ExpenseManager',
+        'investmenttracker': 'InvestmentTracker',
+        'taxhelper': 'TaxHelper',
+        'creditmonitor': 'CreditMonitor'
+    };
+    
+    const institutionName = institutions[institutionId];
+    
+    if (confirm(`Do you want to request additional permissions from ${institutionName}?`)) {
+        showNotification(`Access request sent to ${institutionName}`, 'success');
+        
+        // Simulate updating the UI after a delay
+        setTimeout(() => {
+            showNotification(`${institutionName} will review your request within 24 hours`, 'info');
+        }, 2000);
+    }
+}
 
 console.log('Eurovia Banking Dashboard loaded successfully!');
