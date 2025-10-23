@@ -41,35 +41,37 @@
             },
             template: `
                 <AppLayout page-title="Renew Permissions" current-page="renew-permissions" @quick-action="handleQuickAction">
-                    <!-- BudgetTracker -->
-                    <div class="permission-card active">
-                        <div class="permission-header">
-                            <div class="institution-info">
-                                <div class="institution-logo budget">BT</div>
-                                <div class="institution-details">
-                                    <h3>BudgetTracker</h3>
-                                    <div class="verification-badge">
-                                        <i class="fas fa-check-circle"></i>
-                                        <span>Verified</span>
+                    <div class="permissions-grid">
+                        <!-- BudgetTracker -->
+                        <div class="permission-card active">
+                            <div class="permission-header">
+                                <div class="institution-info">
+                                    <div class="institution-logo budget">BT</div>
+                                    <div class="institution-details">
+                                        <h3>BudgetTracker</h3>
+                                        <div class="verification-badge">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>Verified</span>
+                                        </div>
                                     </div>
                                 </div>
+                                <div class="permission-status expiring">Expiring Soon</div>
                             </div>
-                            <div class="permission-status expiring">Expiring Soon</div>
-                        </div>
-                        
-                        <div class="permission-details">
-                            <div class="permission-type">
-                                <i class="fas fa-chart-pie"></i>
-                                <span>Account Balance & Categories</span>
+                            
+                            <div class="permission-details">
+                                <div class="permission-type">
+                                    <i class="fas fa-chart-pie"></i>
+                                    <span>Account Balance & Categories</span>
+                                </div>
+                                <div class="permission-duration">
+                                    <span>15.06.2025 - 25.10.2025</span>
+                                </div>
                             </div>
-                            <div class="permission-duration">
-                                <span>15.06.2025 - 25.10.2025</span>
+                            
+                            <div class="permission-actions">
+                                <button class="btn-renew">Renew Access</button>
+                                <button class="btn-revoke">Revoke</button>
                             </div>
-                        </div>
-                        
-                        <div class="permission-actions">
-                            <button class="btn-renew">Renew Access</button>
-                            <button class="btn-revoke">Revoke</button>
                         </div>
                     </div>
                 </AppLayout>
