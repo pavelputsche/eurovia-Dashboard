@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Details - Eurovia Banking</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div id="app"></div>
+
+    <!-- Vue.js 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script type="module">
+        import AppLayout from '../components/AppLayout.js';
+        import { utils, mockData } from '../js/common.js';
+
+        const { createApp, ref, computed, onMounted } = Vue;
+
+        const ViewDetailsApp = {
+            components: {
+                AppLayout
+            },
+            setup() {
+                const selectedPermission = ref(null);
+                const permissions = ref(mockData.permissions || [
+                    {
+                        id: 1,
+                        appName: 'PaymentApp Pro',
+                        icon: 'fas fa-credit-card',
+                        status: 'Active',
+                        grantedDate: '2024-08-01',
+                        expiryDate: '2025-08-01',
+                        permissions: ['Transaction History', 'Account Balance', 'Payment Processing'],
+                        dataAccessed: ['Last accessed: 2 hours ago', 'Data synced: Daily', '156 transactions processed'],
+                        securityLevel: 'High',
+                        riskLevel: 'Low'
+                    },
+                    {
+                        id: 2,
+                        appName: 'BudgetTracker',
+                        icon: 'fas fa-chart-pie',
+                        status: 'Expiring Soon',
+                        grantedDate: '2024-06-15',
+                        expiryDate: '2025-10-25',
+                        permissions: ['Account Balance', 'Spending Categories'],
+                        dataAccessed: ['Last accessed: 5 minutes ago', 'Data synced: Real-time', '89 categories tracked'],
+                        securityLevel: 'Medium',
+                        riskLevel: 'Low'
+                    }
+                ]);
+
+                const handleViewPermission = (permission) => {
+                    selectedPermission.value = permission;
+                };
+
+                const handleBack = () => {
+                    selectedPermission.value = null;
+                };
+
+                const handleQuickAction = (action) => {
+                    switch(action) {
+                        case 'request-access':
+                            window.location.href = 'request-access.html';
+                            break;
+                        case 'renew-permissions':
+                            window.location.href = 'renew-permissions.html';
+                            break;
+                        default:
+                            utils.showNotification(`${action} functionality would be implemented here`, 'info');
+                    }
+                };
+
+                const getDaysToExpiry = (expiryDate) => {
+                    const today = new Date();
+                    const expiry = new Date(expiryDate);
+                    const diffTime = expiry - today;
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    return diffDays;
+                };
+
+                const getStatusClass = (status) => {
+                    return {
+                        'status-active': status === 'Active',
+                        'status-expiring': status === 'Expiring Soon',
+                        'status-expired': status === 'Expired'
+                    };
+                };
+
+                return {
+                    selectedPermission,
+                    permissions,
+                    handleViewPermission,
+                    handleBack,
+                    handleQuickAction,
+                    getDaysToExpiry,
+                    getStatusClass,
+                    utils
+                };
+            },
+            template: `
+                <AppLayout page-title="View Details" current-page="view-details" @quick-action="handleQuickAction">
+                    <!-- Permission List View -->
+                    <div v-if="!selectedPermission">
+                        <div class="details-header">
+                            <h2>Permission Details Overview</h2>
+                            <p>View detailed information about your permissions and data access</p>
+                        </div>
+
+                        <div class="permissions-grid">
+                            <div 
+                                v-for="permission in permissions" 
+                                :key="permission.id"
+                                class="permission-card clickable"
+                                @click="handleViewPermission(permission)"
+                            >
+                                <div class="card-header">
+                                    <div class="app-info">
+                                        <div class="app-icon">
+                                            <i :class="permission.icon"></i>
+                                        </div>
+                                        <div class="app-details">
+                                            <h3 class="app-name">{{ permission.appName }}</h3>
+                                            <div class="app-verification">
+                                                <i class="fas fa-check-circle"></i>
+                                                <span>Verified Application</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="permission-status" :class="getStatusClass(permission.status)">
+                                        {{ permission.status }}
+                                    </div>
+                                </div>
+
+                                <div class="card-content">
+                                    <div class="quick-stats">
+                                        <div class="stat-item">
+                                            <span class="stat-label">Permissions:</span>
+                                            <span class="stat-value">{{ permission.permissions.length }}</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <span class="stat-label">Days to expiry:</span>
+                                            <span class="stat-value">{{ getDaysToExpiry(permission.expiryDate) }}</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <button class="btn-view-details">
+                                        <i class="fas fa-eye"></i>
+                                        View Full Details
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Permission View -->
+                    <div v-if="selectedPermission" class="permission-detail-view">
+                        <div class="detail-header">
+                            <button @click="handleBack" class="btn-back">
+                                <i class="fas fa-arrow-left"></i>
+                                Back to Overview
+                            </button>
+                            <h2>{{ selectedPermission.appName }} - Detailed View</h2>
+                        </div>
+
+                        <div class="detail-content">
+                            <div class="detail-grid">
+                                <!-- Basic Information -->
+                                <div class="detail-section">
+                                    <h3><i class="fas fa-info-circle"></i> Basic Information</h3>
+                                    <div class="info-grid">
+                                        <div class="info-item">
+                                            <label>Application Name:</label>
+                                            <span>{{ selectedPermission.appName }}</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <label>Status:</label>
+                                            <span class="status-badge" :class="getStatusClass(selectedPermission.status)">
+                                                {{ selectedPermission.status }}
+                                            </span>
+                                        </div>
+                                        <div class="info-item">
+                                            <label>Granted Date:</label>
+                                            <span>{{ utils.formatDate(selectedPermission.grantedDate) }}</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <label>Expiry Date:</label>
+                                            <span>{{ utils.formatDate(selectedPermission.expiryDate) }}</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <label>Security Level:</label>
+                                            <span class="security-badge">{{ selectedPermission.securityLevel }}</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <label>Risk Level:</label>
+                                            <span class="risk-badge">{{ selectedPermission.riskLevel }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Granted Permissions -->
+                                <div class="detail-section">
+                                    <h3><i class="fas fa-key"></i> Granted Permissions</h3>
+                                    <div class="permissions-list">
+                                        <div 
+                                            v-for="perm in selectedPermission.permissions" 
+                                            :key="perm"
+                                            class="permission-item active"
+                                        >
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>{{ perm }}</span>
+                                            <span class="permission-scope">Full Access</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Data Access Information -->
+                                <div class="detail-section">
+                                    <h3><i class="fas fa-database"></i> Data Access Information</h3>
+                                    <div class="data-access-list">
+                                        <div 
+                                            v-for="access in selectedPermission.dataAccessed" 
+                                            :key="access"
+                                            class="access-item"
+                                        >
+                                            <i class="fas fa-chart-line"></i>
+                                            <span>{{ access }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Actions -->
+                                <div class="detail-section">
+                                    <h3><i class="fas fa-cogs"></i> Actions</h3>
+                                    <div class="action-buttons">
+                                        <button class="btn-primary">
+                                            <i class="fas fa-sync-alt"></i>
+                                            Renew Permission
+                                        </button>
+                                        <button class="btn-secondary">
+                                            <i class="fas fa-edit"></i>
+                                            Modify Access
+                                        </button>
+                                        <button class="btn-warning">
+                                            <i class="fas fa-pause"></i>
+                                            Suspend Access
+                                        </button>
+                                        <button class="btn-danger">
+                                            <i class="fas fa-ban"></i>
+                                            Revoke Access
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </AppLayout>
+            `
+        };
+
+        createApp(ViewDetailsApp).mount('#app');
+    </script>
+
+    <style>
+        .clickable {
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .clickable:hover {
+            transform: translateY(-2px);
+        }
+
+        .details-header {
+            margin-bottom: 30px;
+        }
+
+        .details-header h2 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .details-header p {
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+
+        .quick-stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .btn-view-details {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-view-details:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .permission-detail-view {
+            max-width: 1200px;
+        }
+
+        .detail-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .btn-back {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background: #5a6268;
+            transform: translateY(-1px);
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .detail-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e9ecef;
+        }
+
+        .detail-section h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-size: 1.2rem;
+        }
+
+        .detail-section h3 i {
+            color: #667eea;
+        }
+
+        .info-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f8f9fa;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-item label {
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .status-badge, .security-badge, .risk-badge {
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-badge.status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-badge.status-expiring {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .security-badge {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .risk-badge {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .permissions-list, .data-access-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .permission-item, .access-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+        }
+
+        .permission-item i, .access-item i {
+            color: #28a745;
+        }
+
+        .permission-scope {
+            margin-left: auto;
+            font-size: 0.85rem;
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+        }
+
+        .action-buttons button {
+            padding: 12px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .action-buttons button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .detail-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</body>
+</html>

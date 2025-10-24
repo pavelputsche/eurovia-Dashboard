@@ -16,6 +16,7 @@ export default {
       { id: 'dashboard', title: 'Dashboard', icon: 'fas fa-tachometer-alt', href: 'dashboard.html' },
       { id: 'permissions', title: 'My Permissions', icon: 'fas fa-key', href: 'permissions.html' },
       { id: 'requests', title: 'Access Requests', icon: 'fas fa-inbox', href: 'requests.html' },
+      { id: 'view-details', title: 'View Details', icon: 'fas fa-info-circle', href: 'view-details.html' },
       { id: 'revoked', title: 'Revoked Access', icon: 'fas fa-ban', href: 'revoked.html' },
       { id: 'apps', title: 'Connected Apps', icon: 'fas fa-puzzle-piece', href: 'apps.html' },
       { id: 'activity', title: 'Activity Log', icon: 'fas fa-history', href: 'activity.html' },
@@ -26,7 +27,7 @@ export default {
       { action: 'request-access', title: 'Request Access', icon: 'fas fa-plus-circle', href: 'request-access.html' },
       { action: 'renew-permissions', title: 'Renew Permissions', icon: 'fas fa-sync-alt', href: 'renew-permissions.html' },
       { action: 'revoke-access', title: 'Revoke Access', icon: 'fas fa-times-circle', handler: 'handleRevokeAccess' },
-      { action: 'view-details', title: 'View Details', icon: 'fas fa-info-circle', handler: 'handleViewDetails' }
+      { action: 'view-details', title: 'View Details', icon: 'fas fa-info-circle', href: 'view-details.html' }
     ]);
 
     const toggleSidebar = () => {
@@ -93,7 +94,7 @@ export default {
     };
 
     const handleViewDetails = () => {
-      showNotification('Permission details would be displayed here', 'info');
+      window.location.href = 'view-details.html';
     };
 
     onMounted(() => {
